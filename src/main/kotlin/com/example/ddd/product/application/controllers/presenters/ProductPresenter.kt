@@ -1,7 +1,7 @@
 package com.example.ddd.product.application.controllers.presenters
 
 import com.example.ddd.product.application.controllers.responses.ProductResponse
-import com.example.ddd.product.domain.models.Product
+import com.example.ddd.product.domain.models.entities.Product
 import org.springframework.stereotype.Component
 
 interface ProductPresenter {
@@ -15,7 +15,9 @@ class ProductPresenterIml : ProductPresenter {
         return ProductResponse(
             product.id,
             product.name,
-            product.description
+            product.description,
+            product.createdAt.toString(),
+            product.updatedAt.toString()
         )
     }
 

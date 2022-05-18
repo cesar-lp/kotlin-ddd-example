@@ -1,7 +1,7 @@
 package com.example.ddd.product.domain.useCases
 
 import com.example.ddd.product.domain.errors.ProductNotFoundException
-import com.example.ddd.product.domain.models.Product
+import com.example.ddd.product.domain.models.entities.Product
 import com.example.ddd.product.domain.repositories.ProductRepository
 import org.springframework.stereotype.Service
 

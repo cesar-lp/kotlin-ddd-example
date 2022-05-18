@@ -1,7 +1,7 @@
 package com.example.ddd.product.domain.useCases
 
 import com.example.ddd.product.domain.errors.ProductNotFoundException
-import com.example.ddd.product.domain.models.Product
+import com.example.ddd.product.domain.models.entities.Product
 import com.example.ddd.product.domain.repositories.ProductRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -31,7 +31,7 @@ class GetProductUseCaseTest {
 
         val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
 
-        every { repository.get(id) } returns existingProduct
+        every { repository.get(any()) } returns existingProduct
 
         val productFound = getProduct(id)
 
@@ -42,7 +42,7 @@ class GetProductUseCaseTest {
     fun `should throw an exception if the product retrieved from DB is null`() {
         val id = "prd-0"
 
-        every { repository.get(id) } returns null
+        every { repository.get(any()) } returns null
 
         assertThrows<ProductNotFoundException> {
             getProduct(id)

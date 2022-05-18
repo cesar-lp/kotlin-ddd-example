@@ -2,6 +2,7 @@ package com.example.ddd.product.application.controllers
 
 import com.example.ddd.App
 import com.example.ddd.common.application.errors.ErrorResponse
+import com.example.ddd.product.application.controllers.requests.CreateProductRequest
 import com.example.ddd.product.application.controllers.responses.ProductResponse
 import com.example.ddd.testUtils.deserializeJSON
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -31,7 +32,10 @@ class ProductControllerTest {
 
             val response = restTemplate.getForEntity("/products/prd-1", ProductResponse::class.java)
 
-            val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath)
+            val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
+                createdAt = response.body?.createdAt.toString(),
+                updatedAt = response.body?.updatedAt.toString()
+            )
 
             assertNotNull(response)
             assertEquals(HttpStatus.OK, response.statusCode)
@@ -50,6 +54,27 @@ class ProductControllerTest {
 
             assertNotNull(response)
             assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+            assertEquals(expectedResponse, response.body)
+        }
+    }
+
+    @Nested
+    inner class CreateProduct {
+
+        @Test
+        fun `should get a 201 with a product response`() {
+            val jsonResponseFilePath = "/controllers/product/createProduct.json"
+            val request = CreateProductRequest(name = "Coke", description = "Coke can")
+
+            val response = restTemplate.postForEntity("/products", request, ProductResponse::class.java)
+
+            val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
+                createdAt = response.body?.createdAt.toString(),
+                updatedAt = response.body?.updatedAt.toString()
+            )
+
+            assertNotNull(response)
+            assertEquals(HttpStatus.CREATED, response.statusCode)
             assertEquals(expectedResponse, response.body)
         }
     }

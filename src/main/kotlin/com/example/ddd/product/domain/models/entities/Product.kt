@@ -1,11 +1,14 @@
-package com.example.ddd.product.domain.models
+package com.example.ddd.product.domain.models.entities
 
+import java.time.Instant
 import java.util.*
 
 class Product(
-    var id: String,
+    var id: String = "",
     var name: String,
-    var description: String
+    var description: String,
+    val createdAt: Instant = Instant.now(),
+    var updatedAt: Instant = Instant.now()
 ) {
 
     override fun hashCode() = Objects.hash(id, name)
@@ -14,7 +17,7 @@ class Product(
         if (this === other) return true
         if (other !is Product) return false
 
-        return (other.id === id && other.name === name)
+        return (other.id == id && other.name == name)
     }
 
     override fun toString(): String {

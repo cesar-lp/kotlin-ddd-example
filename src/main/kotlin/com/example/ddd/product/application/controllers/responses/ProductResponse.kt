@@ -1,7 +1,13 @@
 package com.example.ddd.product.application.controllers.responses
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class ProductResponse(
     val id: String,
     val name: String,
-    val description: String
+    val description: String,
+    val createdAt: String,
+    val updatedAt: String
 )
