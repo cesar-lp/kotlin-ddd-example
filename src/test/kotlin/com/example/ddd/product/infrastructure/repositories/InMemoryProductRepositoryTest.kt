@@ -12,13 +12,13 @@ class InMemoryProductRepositoryTest {
 
     private lateinit var repository: ProductRepository
 
-    @BeforeEach
-    fun beforeEach() {
-        repository = InMemoryProductRepository()
-    }
-
     @Nested
-    inner class GetProduct {
+    inner class Get {
+
+        @BeforeEach
+        fun beforeEach() {
+            repository = InMemoryProductRepository()
+        }
 
         @Test
         fun `should return a product`() {
@@ -37,14 +37,29 @@ class InMemoryProductRepositoryTest {
     }
 
     @Nested
-    inner class CreateProduct {
+    inner class Save {
+
+        @BeforeEach
+        fun beforeEach() {
+            repository = InMemoryProductRepository()
+        }
 
         @Test
-        fun `should save a product`() {
+        fun `should save a new product`() {
             val savedProduct = repository.save(Product(name = "Coke", description = "Coke can"))
             val expectedProductSaved = Product(id = "prd-4", name = "Coke", description = "Coke can")
 
             assertEquals(expectedProductSaved, savedProduct)
+        }
+
+        @Test
+        fun `should update an existing product`() {
+            val updatedProduct = Product(id = "prd-2", name = "Stake", description = "Very big stake")
+
+            repository.save(updatedProduct)
+
+            assertEquals(3, repository.getAll().size)
+            assertEquals(updatedProduct, repository.getAll()[1])
         }
     }
 }

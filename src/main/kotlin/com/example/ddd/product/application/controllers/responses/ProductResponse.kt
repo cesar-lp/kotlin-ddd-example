@@ -2,6 +2,7 @@ package com.example.ddd.product.application.controllers.responses
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import java.io.Serializable
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class ProductResponse(
@@ -10,4 +11,4 @@ data class ProductResponse(
     val description: String,
     val createdAt: String,
     val updatedAt: String
-)
+) : Serializable
