@@ -15,38 +15,38 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MockKExtension::class)
 class GetProductUseCaseTest {
 
-    @MockK
-    private lateinit var repository: ProductRepository
+  @MockK
+  private lateinit var repository: ProductRepository
 
-    private lateinit var getProduct: GetProductUseCase
+  private lateinit var getProduct: GetProductUseCase
 
-    @BeforeEach
-    fun beforeEach() {
-        getProduct = GetProductUseCaseImpl(repository)
+  @BeforeEach
+  fun beforeEach() {
+    getProduct = GetProductUseCaseImpl(repository)
+  }
+
+  @Test
+  fun `should get a product from DB and return it`() {
+    val id = "prd-1"
+
+    val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
+
+    every { repository.get(any()) } returns existingProduct
+
+    val productFound = getProduct(id)
+
+    assertEquals(existingProduct, productFound)
+  }
+
+  @Test
+  fun `should throw an exception if the product retrieved from DB is null`() {
+    val id = "prd-0"
+
+    every { repository.get(any()) } returns null
+
+    assertThrows<ProductNotFoundException> {
+      getProduct(id)
     }
-
-    @Test
-    fun `should get a product from DB and return it`() {
-        val id = "prd-1"
-
-        val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
-
-        every { repository.get(any()) } returns existingProduct
-
-        val productFound = getProduct(id)
-
-        assertEquals(existingProduct, productFound)
-    }
-
-    @Test
-    fun `should throw an exception if the product retrieved from DB is null`() {
-        val id = "prd-0"
-
-        every { repository.get(any()) } returns null
-
-        assertThrows<ProductNotFoundException> {
-            getProduct(id)
-        }
-    }
+  }
 
 }

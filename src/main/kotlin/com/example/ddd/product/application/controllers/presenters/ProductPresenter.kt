@@ -5,20 +5,20 @@ import com.example.ddd.product.domain.models.entities.Product
 import org.springframework.stereotype.Component
 
 interface ProductPresenter {
-    operator fun invoke(product: Product): ProductResponse
+  operator fun invoke(product: Product): ProductResponse
 }
 
 @Component
 class ProductPresenterIml : ProductPresenter {
 
-    override operator fun invoke(product: Product): ProductResponse {
-        return ProductResponse(
-            product.id,
-            product.name,
-            product.description,
-            product.createdAt.toString(),
-            product.updatedAt.toString()
-        )
-    }
+  override operator fun invoke(product: Product): ProductResponse {
+    return ProductResponse(
+      product.id,
+      product.name,
+      product.description,
+      product.createdAt.toString(),
+      product.updatedAt.toString()
+    )
+  }
 
 }

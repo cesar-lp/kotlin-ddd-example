@@ -6,16 +6,16 @@ import com.example.ddd.product.domain.repositories.ProductRepository
 import org.springframework.stereotype.Service
 
 interface GetProductUseCase {
-    operator fun invoke(id: String): Product
+  operator fun invoke(id: String): Product
 }
 
 @Service
 class GetProductUseCaseImpl(
-    private val productRepository: ProductRepository
+  private val productRepository: ProductRepository
 ) : GetProductUseCase {
 
-    override operator fun invoke(id: String): Product {
-        return productRepository.get(id) ?: throw ProductNotFoundException(id)
-    }
+  override operator fun invoke(id: String): Product {
+    return productRepository.get(id) ?: throw ProductNotFoundException(id)
+  }
 
 }

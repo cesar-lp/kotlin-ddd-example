@@ -14,23 +14,23 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MockKExtension::class)
 class CreateProductUseCaseTest {
 
-    @MockK
-    private lateinit var repository: ProductRepository
+  @MockK
+  private lateinit var repository: ProductRepository
 
-    private lateinit var createProduct: CreateProductUseCase
+  private lateinit var createProduct: CreateProductUseCase
 
-    @BeforeEach
-    fun beforeEach() {
-        createProduct = CreateProductUseCaseImpl(repository)
-    }
+  @BeforeEach
+  fun beforeEach() {
+    createProduct = CreateProductUseCaseImpl(repository)
+  }
 
-    @Test
-    fun `should create product`() {
-        val newProduct = NewProduct(name = "Coke", description = "Coke can")
-        val expectedProductCreated = Product(name = "Coke", description = "Coke can")
+  @Test
+  fun `should create product`() {
+    val newProduct = NewProduct(name = "Coke", description = "Coke can")
+    val expectedProductCreated = Product(name = "Coke", description = "Coke can")
 
-        every { repository.save(any()) } returns expectedProductCreated
+    every { repository.save(any()) } returns expectedProductCreated
 
-        assertEquals(expectedProductCreated, createProduct(newProduct))
-    }
+    assertEquals(expectedProductCreated, createProduct(newProduct))
+  }
 }

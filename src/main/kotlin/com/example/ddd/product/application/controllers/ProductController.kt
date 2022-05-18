@@ -22,36 +22,36 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/products")
 class ProductController(
-    private val getProduct: GetProductUseCase,
-    private val createProduct: CreateProductUseCase,
-    private val updateProduct: UpdateProductUseCase,
-    private val present: ProductPresenter
+  private val getProduct: GetProductUseCase,
+  private val createProduct: CreateProductUseCase,
+  private val updateProduct: UpdateProductUseCase,
+  private val present: ProductPresenter
 ) {
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody request: CreateProductRequest): ProductResponse {
-        val newProduct = NewProduct(
-            name = request.name,
-            description = request.description
-        )
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  fun create(@RequestBody request: CreateProductRequest): ProductResponse {
+    val newProduct = NewProduct(
+      name = request.name,
+      description = request.description
+    )
 
-        return present(createProduct(newProduct))
-    }
+    return present(createProduct(newProduct))
+  }
 
-    @GetMapping("/{id}")
-    fun get(@PathVariable id: String): ProductResponse {
-        return present(getProduct(id))
-    }
+  @GetMapping("/{id}")
+  fun get(@PathVariable id: String): ProductResponse {
+    return present(getProduct(id))
+  }
 
-    @PutMapping("/{id}")
-    fun update(@PathVariable id: String, @RequestBody request: UpdateProductRequest): ProductResponse {
-        val updatedProduct = UpdatedProduct(
-            name = request.name,
-            description = request.description
-        )
+  @PutMapping("/{id}")
+  fun update(@PathVariable id: String, @RequestBody request: UpdateProductRequest): ProductResponse {
+    val updatedProduct = UpdatedProduct(
+      name = request.name,
+      description = request.description
+    )
 
-        return present(updateProduct(id, updatedProduct))
-    }
+    return present(updateProduct(id, updatedProduct))
+  }
 
 }

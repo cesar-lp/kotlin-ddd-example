@@ -16,39 +16,39 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MockKExtension::class)
 class UpdateProductUseCaseTest {
 
-    @MockK
-    private lateinit var repository: ProductRepository
+  @MockK
+  private lateinit var repository: ProductRepository
 
-    private lateinit var updateProduct: UpdateProductUseCase
+  private lateinit var updateProduct: UpdateProductUseCase
 
-    @BeforeEach
-    fun beforeEach() {
-        updateProduct = UpdateProductUseCaseImpl(repository)
+  @BeforeEach
+  fun beforeEach() {
+    updateProduct = UpdateProductUseCaseImpl(repository)
+  }
+
+  @Test
+  fun `should update a product and return it`() {
+    val id = "prd-1"
+
+    val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
+    val expectedProductUpdated = Product("prd-1", "Beer", "Enjoy your day and night with a nice cold beer")
+
+    every { repository.get(any()) } returns existingProduct
+    every { repository.save(any()) } returns expectedProductUpdated
+
+    val productUpdated = updateProduct(id, UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer"))
+
+    assertEquals(expectedProductUpdated, productUpdated)
+  }
+
+  @Test
+  fun `should throw an exception if the product to be updated does not exist`() {
+    val id = "prd-0"
+
+    every { repository.get(any()) } returns null
+
+    assertThrows<ProductNotFoundException> {
+      updateProduct(id, UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer"))
     }
-
-    @Test
-    fun `should update a product and return it`() {
-        val id = "prd-1"
-
-        val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
-        val expectedProductUpdated = Product("prd-1", "Beer", "Enjoy your day and night with a nice cold beer")
-
-        every { repository.get(any()) } returns existingProduct
-        every { repository.save(any()) } returns expectedProductUpdated
-
-        val productUpdated = updateProduct(id, UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer"))
-
-        assertEquals(expectedProductUpdated, productUpdated)
-    }
-
-    @Test
-    fun `should throw an exception if the product to be updated does not exist`() {
-        val id = "prd-0"
-
-        every { repository.get(any()) } returns null
-
-        assertThrows<ProductNotFoundException> {
-            updateProduct(id, UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer"))
-        }
-    }
+  }
 }

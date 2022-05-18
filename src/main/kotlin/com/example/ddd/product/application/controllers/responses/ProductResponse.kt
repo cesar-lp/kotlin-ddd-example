@@ -6,9 +6,9 @@ import java.io.Serializable
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class ProductResponse(
-    val id: String,
-    val name: String,
-    val description: String,
-    val createdAt: String,
-    val updatedAt: String
+  val id: String,
+  val name: String,
+  val description: String,
+  val createdAt: String,
+  val updatedAt: String
 ) : Serializable
