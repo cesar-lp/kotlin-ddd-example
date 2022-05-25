@@ -6,6 +6,7 @@ import com.example.ddd.product.domain.repositories.ProductRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -36,6 +37,8 @@ class GetProductUseCaseTest {
     val productFound = getProduct(id)
 
     assertEquals(existingProduct, productFound)
+
+    verifyAll { repository.get(id) }
   }
 
   @Test
@@ -46,6 +49,8 @@ class GetProductUseCaseTest {
 
     assertThrows<ProductNotFoundException> {
       getProduct(id)
+
+      verifyAll { repository.get(id) }
     }
   }
 

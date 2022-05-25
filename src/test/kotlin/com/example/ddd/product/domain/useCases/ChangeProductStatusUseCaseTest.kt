@@ -9,7 +9,7 @@ import io.mockk.Called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.verify
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,11 +22,14 @@ class ChangeProductStatusUseCaseTest {
   @MockK
   private lateinit var repository: ProductRepository
 
+  @MockK
+  private lateinit var getProduct: GetProductUseCase
+
   private lateinit var changeProductStatus: ChangeProductStatusUseCase
 
   @BeforeEach
   fun beforeEach() {
-    changeProductStatus = ChangeProductStatusUseCaseImpl(repository)
+    changeProductStatus = ChangeProductStatusUseCaseImpl(getProduct, repository)
   }
 
   @Test
@@ -47,12 +50,15 @@ class ChangeProductStatusUseCaseTest {
       status = ProductStatus.DISABLED
     )
 
-    every { repository.get(any()) } returns existingProduct
+    every { getProduct(any()) } returns existingProduct
     every { repository.save(any()) } returns expectedProductUpdated
 
     val productUpdated = changeProductStatus(id, "disabled")
 
-    verify { repository.save(expectedProductUpdated) }
+    verifyAll {
+      getProduct(id)
+      repository.save(expectedProductUpdated)
+    }
 
     assertEquals(expectedProductUpdated, productUpdated)
   }
@@ -61,12 +67,15 @@ class ChangeProductStatusUseCaseTest {
   fun `should throw an exception if the product to be updated does not exist`() {
     val id = "prd-0"
 
-    every { repository.get(any()) } returns null
+    every { getProduct(any()) } throws ProductNotFoundException(id)
 
     assertThrows<ProductNotFoundException> {
       changeProductStatus(id, "disabled")
 
-      verify { repository.save(any()) wasNot Called }
+      verifyAll {
+        getProduct(id)
+        repository.save(any()) wasNot Called
+      }
     }
   }
 
@@ -81,12 +90,15 @@ class ChangeProductStatusUseCaseTest {
       status = ProductStatus.ENABLED
     )
 
-    every { repository.get(any()) } returns existingProduct
+    every { getProduct(any()) } returns existingProduct
 
     assertThrows<InvalidProductStatusException> {
       changeProductStatus(id, "invalid status")
 
-      verify { repository.save(any()) wasNot Called }
+      verifyAll {
+        getProduct(id)
+        repository.save(any()) wasNot Called
+      }
     }
   }
 }

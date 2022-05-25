@@ -6,6 +6,7 @@ import com.example.ddd.product.domain.repositories.ProductRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.verifyAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,5 +33,7 @@ class CreateProductUseCaseTest {
     every { repository.save(any()) } returns expectedProductCreated
 
     assertEquals(expectedProductCreated, createProduct(newProduct))
+
+    verifyAll { repository.save(expectedProductCreated) }
   }
 }
