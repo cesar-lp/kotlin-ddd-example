@@ -1,9 +1,9 @@
 package com.example.ddd.common.application.config
 
 import com.example.ddd.common.application.errors.ErrorResponse
-import com.example.ddd.product.domain.errors.InvalidProductStatusException
-import com.example.ddd.product.domain.errors.InvalidProductStockException
-import com.example.ddd.product.domain.errors.ProductNotFoundException
+import com.example.ddd.order.domain.errors.InvalidProductStatusException
+import com.example.ddd.order.domain.errors.InvalidProductStockException
+import com.example.ddd.order.domain.errors.ProductNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
