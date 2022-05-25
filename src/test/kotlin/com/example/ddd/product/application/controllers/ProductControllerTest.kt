@@ -11,6 +11,7 @@ import com.example.ddd.product.domain.models.entities.ProductStatus
 import com.example.ddd.testUtils.deserializeJSON
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +20,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.test.annotation.DirtiesContext
 
 @SpringBootTest(
   classes = [App::class],
@@ -30,6 +32,8 @@ class ProductControllerTest {
   private lateinit var restTemplate: TestRestTemplate
 
   @Nested
+  @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+  @DisplayName("GET - /products/{id}")
   inner class GetProduct {
 
     @Test
@@ -65,6 +69,8 @@ class ProductControllerTest {
   }
 
   @Nested
+  @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+  @DisplayName("POST - /products")
   inner class CreateProduct {
 
     @Test
@@ -86,6 +92,8 @@ class ProductControllerTest {
   }
 
   @Nested
+  @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+  @DisplayName("PUT - /products/{id}")
   inner class UpdateProduct {
 
     @Test
@@ -128,6 +136,8 @@ class ProductControllerTest {
   }
 
   @Nested
+  @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+  @DisplayName("PATCH - /products/{id}/status")
   inner class ChangeStatus {
 
     @Test
@@ -189,6 +199,8 @@ class ProductControllerTest {
   }
 
   @Nested
+  @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+  @DisplayName("PATCH - /products/{id}/stock")
   inner class AddStock {
 
     @Test
