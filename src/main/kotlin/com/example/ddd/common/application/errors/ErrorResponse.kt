@@ -12,5 +12,11 @@ data class ErrorResponse(
       "Not found",
       "The requested resource could not be found"
     )
+
+    val BAD_REQUEST = ErrorResponse(
+      "BAD_REQUEST",
+      "Bad request",
+      "Bad request"
+    )
   }
 }

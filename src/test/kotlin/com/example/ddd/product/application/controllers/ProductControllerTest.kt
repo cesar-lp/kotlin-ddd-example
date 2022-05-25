@@ -2,9 +2,11 @@ package com.example.ddd.product.application.controllers
 
 import com.example.ddd.App
 import com.example.ddd.common.application.errors.ErrorResponse
+import com.example.ddd.product.application.controllers.requests.ChangeProductStatusRequest
 import com.example.ddd.product.application.controllers.requests.CreateProductRequest
 import com.example.ddd.product.application.controllers.requests.UpdateProductRequest
 import com.example.ddd.product.application.controllers.responses.ProductResponse
+import com.example.ddd.product.domain.models.entities.ProductStatus
 import com.example.ddd.testUtils.deserializeJSON
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -120,6 +122,67 @@ class ProductControllerTest {
 
       assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+      assertEquals(expectedResponse, response.body)
+    }
+  }
+
+  @Nested
+  inner class ChangeStatus {
+
+    @Test
+    fun `should change a product's status`() {
+      val jsonResponseFilePath = "/controllers/product/disabledProduct.json"
+      val request = ChangeProductStatusRequest(ProductStatus.DISABLED.description)
+
+      val response = restTemplate.exchange(
+        "/products/prd-1/status", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
+      )
+
+      val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
+        createdAt = response.body?.createdAt.toString(),
+        updatedAt = response.body?.updatedAt.toString()
+      )
+
+      assertNotNull(response)
+      assertEquals(HttpStatus.OK, response.statusCode)
+      assertEquals(expectedResponse, response.body)
+    }
+
+    @Test
+    fun `should not change the status of a non existing product`() {
+      val request = ChangeProductStatusRequest(ProductStatus.DISABLED.description)
+
+      val response = restTemplate.exchange(
+        "/products/prd-0/status", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
+      )
+
+      val expectedResponse = ErrorResponse(
+        "RESOURCE_NOT_FOUND",
+        "Not found",
+        "The requested resource could not be found"
+      )
+
+      assertNotNull(response)
+      assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+      assertEquals(expectedResponse, response.body)
+    }
+
+    @Test
+    fun `should not change a product's status to an invalid value`() {
+      val request = ChangeProductStatusRequest("invalid value")
+
+      val response = restTemplate.exchange(
+        "/products/prd-1/status", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
+      )
+
+      val expectedResponse = ErrorResponse(
+        "BAD_REQUEST",
+        "Bad request",
+        "Bad request"
+      )
+
+      assertNotNull(response)
+      assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
       assertEquals(expectedResponse, response.body)
     }
   }

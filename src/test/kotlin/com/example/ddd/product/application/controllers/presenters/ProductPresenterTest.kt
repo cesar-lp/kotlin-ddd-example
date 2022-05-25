@@ -18,9 +18,10 @@ class ProductPresenterTest {
     )
 
     val expectedProductResponse = ProductResponse(
-      "prd-1",
-      "Beer",
-      "Enjoy your day with a nice cold beer",
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day with a nice cold beer",
+      status = "enabled",
       product.createdAt.toString(),
       product.updatedAt.toString()
     )
