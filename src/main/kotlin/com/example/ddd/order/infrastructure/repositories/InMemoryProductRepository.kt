@@ -11,21 +11,21 @@ class InMemoryProductRepository : ProductRepository {
 
   private val products = mutableListOf(
     Product(
-      id = "prd-1",
+      id = "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002",
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       stock = 10,
       price = Money.of(BigDecimal("2.50"))
     ),
     Product(
-      id = "prd-2",
-      name = "Stake",
-      description = "Big stake",
+      id = "prd-95956b62-dc73-11ec-9d64-0242ac120002",
+      name = "Steak",
+      description = "Big steak",
       stock = 5,
       price = Money.of(BigDecimal("7.50"))
     ),
     Product(
-      id = "prd-3",
+      id = "prd-c6064f50-dc73-11ec-9d64-0242ac120002",
       name = "Chips",
       description = "The best chips in town",
       stock = 20,
@@ -46,10 +46,12 @@ class InMemoryProductRepository : ProductRepository {
   }
 
   override fun save(product: Product): Product {
-    if (product.id == "") {
-      saveNewProduct(product)
+    val idx = products.indexOfFirst { it.id == product.id }
+
+    if (idx == -1) {
+      products.add(product)
     } else {
-      updateExistingProduct(product)
+      products[idx] = product
     }
 
     return product
@@ -58,16 +60,4 @@ class InMemoryProductRepository : ProductRepository {
   override fun save(products: Set<Product>) {
     products.forEach { save(it) }
   }
-
-  private fun saveNewProduct(product: Product) {
-    val lastProductId = products.last().id.split("-").last().toInt()
-    product.id = "prd-${lastProductId + 1}"
-    products.add(product)
-  }
-
-  private fun updateExistingProduct(product: Product) {
-    val index = products.indexOfFirst { it.id == product.id }
-    products[index] = product
-  }
-
 }

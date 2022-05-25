@@ -1,12 +1,13 @@
 package com.example.ddd.order.domain.models.entities
 
 import com.example.ddd.common.domain.models.Currency
+import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
 import java.time.Instant
 import java.util.*
 
 class Order(
-  var id: String = "",
+  val id: String = ID.generate("ord"),
   val products: MutableSet<OrderProduct> = mutableSetOf(),
   private var total: Money = Money.ZERO(Currency.USD),
   val createdAt: Instant = Instant.now(),

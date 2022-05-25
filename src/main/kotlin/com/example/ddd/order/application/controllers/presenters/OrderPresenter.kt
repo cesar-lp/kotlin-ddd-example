@@ -15,7 +15,7 @@ class OrderPresenterImpl(
 
   override fun invoke(order: Order): OrderResponse {
     return OrderResponse(
-      id = order.id,
+      id = order.id.toString(),
       products = order.products.map { presentOrderProduct(it) },
       totalPrice = order.getTotalPrice(),
       createdAt = order.createdAt.toString(),

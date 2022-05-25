@@ -7,6 +7,7 @@ import java.io.Serializable
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class OrderProductResponse(
   val id: String,
+  val productId: String,
   val name: String,
   val description: String,
   val quantity: Int,

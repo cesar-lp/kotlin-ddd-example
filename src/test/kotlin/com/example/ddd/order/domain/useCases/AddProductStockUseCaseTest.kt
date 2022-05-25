@@ -1,10 +1,9 @@
 package com.example.ddd.order.domain.useCases
 
-import com.example.ddd.common.domain.models.Money
+import com.example.ddd.common.domain.models.ID
 import com.example.ddd.order.domain.errors.InvalidProductStockException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.models.entities.Product
-import com.example.ddd.order.domain.repositories.ProductRepository
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,10 +16,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-class AddProductStockUseCaseTest {
-
-  @MockK
-  private lateinit var repository: ProductRepository
+class AddProductStockUseCaseTest : BaseUseCaseTest() {
 
   @MockK
   private lateinit var getProduct: GetProductUseCase
@@ -29,44 +25,36 @@ class AddProductStockUseCaseTest {
 
   @BeforeEach
   fun beforeEach() {
-    addStock = AddProductStockUseCaseImpl(getProduct, repository)
+    addStock = AddProductStockUseCaseImpl(getProduct, productRepository)
   }
 
   @Test
   fun `should increment a product stock`() {
-    val id = "prd-1"
+    val id = beerProduct.id
     val stockUnits = 5
 
-    val existingProduct = Product(
-      id = "prd-1",
-      name = "Coke",
-      description = "Coke can",
-      stock = 10,
-      price = Money.of("2.50")
-    )
-
     val expectedProductUpdated = Product(
-      id = "prd-1",
-      name = "Coke",
-      description = "Coke can",
+      id = beerProduct.id,
+      name = beerProduct.name,
+      description = beerProduct.description,
       stock = 15,
-      price = Money.of("2.50")
+      price = beerProduct.getPrice()
     )
 
-    every { getProduct(any()) } returns existingProduct
-    every { repository.save(any<Product>()) } returns expectedProductUpdated
+    every { getProduct(any()) } returns beerProduct
+    every { productRepository.save(any<Product>()) } returns expectedProductUpdated
 
     val productUpdated = addStock(id, stockUnits)
 
     verify { getProduct(id) }
-    verify { repository.save(expectedProductUpdated) }
+    verify { productRepository.save(any<Product>()) }
 
     assertEquals(expectedProductUpdated, productUpdated)
   }
 
   @Test
   fun `should throw an exception if the product is not found`() {
-    val id = "prd-1"
+    val id = ID.of("prd-1")
     val stockUnits = 5
 
     every { getProduct(any()) } throws ProductNotFoundException(id)
@@ -75,25 +63,22 @@ class AddProductStockUseCaseTest {
       addStock(id, stockUnits)
 
       verify { getProduct(id) }
-      verify { repository.save(any<Product>()) wasNot Called }
+      verify { productRepository.save(any<Product>()) wasNot Called }
     }
   }
 
   @Test
   fun `should throw an exception if the resulting stock is negative`() {
-    val id = "prd-1"
+    val id = ID.of("prd-1")
     val stockUnits = -11
 
-    val existingProduct =
-      Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 10, price = Money.of("2.50"))
-
-    every { getProduct(any()) } returns existingProduct
+    every { getProduct(any()) } returns beerProduct
 
     assertThrows<InvalidProductStockException> {
       addStock(id, stockUnits)
 
       verify { getProduct(id) }
-      verify { repository.save(any<Product>()) wasNot Called }
+      verify { productRepository.save(any<Product>()) wasNot Called }
     }
   }
 }

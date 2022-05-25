@@ -31,7 +31,12 @@ class GetProductUseCaseTest {
   fun `should get a product from DB and return it`() {
     val id = "prd-1"
 
-    val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer", price = Money.of("2.50"))
+    val existingProduct = Product(
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day with a nice cold beer",
+      price = Money.of("2.50")
+    )
 
     every { repository.get(any<String>()) } returns existingProduct
 

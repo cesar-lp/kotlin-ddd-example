@@ -10,10 +10,6 @@ class InMemoryOrderRepository : OrderRepository {
   private val orders: MutableSet<Order> = mutableSetOf()
 
   override fun save(order: Order): Order {
-    order.apply {
-      id = "ord-${orders.size + 1}"
-    }
-
     orders.add(order)
 
     return order

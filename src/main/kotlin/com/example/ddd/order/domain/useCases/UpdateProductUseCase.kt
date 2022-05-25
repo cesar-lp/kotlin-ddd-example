@@ -18,9 +18,7 @@ class UpdateProductUseCaseImpl(
 ) : UpdateProductUseCase {
 
   override fun invoke(id: String, updatedProduct: UpdatedProduct): Product {
-    val product = getProduct(id)
-
-    product.apply {
+    val product = getProduct(id).apply {
       name = updatedProduct.name
       description = updatedProduct.description
       updatePrice(Money.of(updatedProduct.price))

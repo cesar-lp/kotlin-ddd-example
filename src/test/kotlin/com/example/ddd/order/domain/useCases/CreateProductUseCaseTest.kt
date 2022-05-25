@@ -36,6 +36,6 @@ class CreateProductUseCaseTest {
 
     assertEquals(expectedProductCreated, createProduct(newProduct))
 
-    verifyAll { repository.save(expectedProductCreated) }
+    verifyAll { repository.save(any<Product>()) }
   }
 }

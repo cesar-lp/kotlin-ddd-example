@@ -15,10 +15,9 @@ class AddProductStockUseCaseImpl(
 ) : AddProductStockUseCase {
 
   override fun invoke(id: String, units: Int): Product {
-    val product = getProduct(id)
-
-    product.updateStock(units)
-
-    return repository.save(product)
+    return getProduct(id).let {
+      it.updateStock(units)
+      repository.save(it)
+    }
   }
 }

@@ -1,8 +1,9 @@
 {
-  "id": "ord-1",
+  "id": "",
   "products": [
     {
-      "id": "prd-1",
+      "id": "",
+      "product_id": "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002",
       "name": "Beer",
       "description": "Enjoy your day with a nice cold beer",
       "unit_price": 2.50,
@@ -10,9 +11,10 @@
       "total_price": 5.00
     },
     {
-      "id": "prd-2",
-      "name": "Stake",
-      "description": "Big stake",
+      "id": "",
+      "product_id": "prd-95956b62-dc73-11ec-9d64-0242ac120002",
+      "name": "Steak",
+      "description": "Big steak",
       "unit_price": 7.50,
       "quantity": 4,
       "total_price": 30.00

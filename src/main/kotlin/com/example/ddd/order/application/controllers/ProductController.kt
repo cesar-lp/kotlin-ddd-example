@@ -1,5 +1,6 @@
 package com.example.ddd.order.application.controllers
 
+import com.example.ddd.common.domain.models.ID
 import com.example.ddd.order.application.controllers.presenters.ProductPresenter
 import com.example.ddd.order.application.controllers.requests.AddProductStockRequest
 import com.example.ddd.order.application.controllers.requests.ChangeProductStatusRequest
@@ -49,7 +50,7 @@ class ProductController(
 
   @GetMapping("/{id}")
   fun get(@PathVariable id: String): ProductResponse {
-    return present(getProduct(id))
+    return present(getProduct(ID.of(id)))
   }
 
   @PutMapping("/{id}")
@@ -60,16 +61,16 @@ class ProductController(
       price = request.price
     )
 
-    return present(updateProduct(id, updatedProduct))
+    return present(updateProduct(ID.of(id), updatedProduct))
   }
 
   @PatchMapping("/{id}/status")
   fun changeStatus(@PathVariable id: String, @RequestBody request: ChangeProductStatusRequest): ProductResponse {
-    return present(changeProductStatus(id, request.status))
+    return present(changeProductStatus(ID.of(id), request.status))
   }
 
   @PatchMapping("/{id}/stock")
   fun addStock(@PathVariable id: String, @RequestBody request: AddProductStockRequest): ProductResponse {
-    return present(addStock(id, request.units))
+    return present(addStock(ID.of(id), request.units))
   }
 }

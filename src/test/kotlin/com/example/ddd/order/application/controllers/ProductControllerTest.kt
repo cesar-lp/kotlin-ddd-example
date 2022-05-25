@@ -21,6 +21,9 @@ import java.math.BigDecimal
 
 class ProductControllerTest : BaseControllerTest() {
 
+  private val BEER_PRODUCT_ID = "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002"
+  private val STEAK_PRODUCT_ID = "prd-95956b62-dc73-11ec-9d64-0242ac120002"
+
   @Nested
   @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
   @DisplayName("GET - /products/{id}")
@@ -30,7 +33,7 @@ class ProductControllerTest : BaseControllerTest() {
     fun `should get 200 with a product response`() {
       val jsonResponseFilePath = "/controllers/product/getProduct.json"
 
-      val response = restTemplate.getForEntity("/products/prd-1", ProductResponse::class.java)
+      val response = restTemplate.getForEntity("/products/${BEER_PRODUCT_ID}", ProductResponse::class.java)
 
       val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
         createdAt = response.body?.createdAt.toString(),
@@ -71,6 +74,7 @@ class ProductControllerTest : BaseControllerTest() {
       val response = restTemplate.postForEntity("/products", request, ProductResponse::class.java)
 
       val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
+        id = response.body?.id.toString(),
         createdAt = response.body?.createdAt.toString(),
         updatedAt = response.body?.updatedAt.toString()
       )
@@ -92,7 +96,7 @@ class ProductControllerTest : BaseControllerTest() {
       val request = UpdateProductRequest("New product name", "New product description", BigDecimal("2.50"))
 
       val response = restTemplate.exchange(
-        "/products/prd-2", HttpMethod.PUT, HttpEntity(request), ProductResponse::class.java
+        "/products/${STEAK_PRODUCT_ID}", HttpMethod.PUT, HttpEntity(request), ProductResponse::class.java
       )
 
       val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
@@ -129,7 +133,7 @@ class ProductControllerTest : BaseControllerTest() {
       val request = UpdateProductRequest("New product name", "New product description", price = BigDecimal("0"))
 
       val response = restTemplate.exchange(
-        "/products/prd-1", HttpMethod.PUT, HttpEntity(request), ErrorResponse::class.java
+        "/products/${BEER_PRODUCT_ID}", HttpMethod.PUT, HttpEntity(request), ErrorResponse::class.java
       )
 
       val expectedResponse = ErrorResponse(
@@ -155,7 +159,7 @@ class ProductControllerTest : BaseControllerTest() {
       val request = ChangeProductStatusRequest(ProductStatus.DISABLED.description)
 
       val response = restTemplate.exchange(
-        "/products/prd-1/status", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
+        "/products/${BEER_PRODUCT_ID}/status", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
       )
 
       val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
@@ -192,7 +196,7 @@ class ProductControllerTest : BaseControllerTest() {
       val request = ChangeProductStatusRequest("invalid value")
 
       val response = restTemplate.exchange(
-        "/products/prd-1/status", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
+        "/products/${BEER_PRODUCT_ID}/status", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
       )
 
       val expectedResponse = ErrorResponse(
@@ -218,7 +222,7 @@ class ProductControllerTest : BaseControllerTest() {
       val request = AddProductStockRequest(5)
 
       val response = restTemplate.exchange(
-        "/products/prd-1/stock", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
+        "/products/${BEER_PRODUCT_ID}/stock", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
       )
 
       val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
@@ -255,7 +259,7 @@ class ProductControllerTest : BaseControllerTest() {
       val request = AddProductStockRequest(-11)
 
       val response = restTemplate.exchange(
-        "/products/prd-1/stock", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
+        "/products/${BEER_PRODUCT_ID}/stock", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
       )
 
       val expectedResponse = ErrorResponse(

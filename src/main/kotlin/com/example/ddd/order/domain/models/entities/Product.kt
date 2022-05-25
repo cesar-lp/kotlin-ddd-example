@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.models.entities
 
+import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
@@ -8,7 +9,7 @@ import java.time.Instant
 import java.util.*
 
 class Product(
-  var id: String = "",
+  val id: String = ID.generate("prd"),
   var name: String,
   var description: String,
   private var status: ProductStatus = ProductStatus.ENABLED,
@@ -48,8 +49,6 @@ class Product(
 
   fun getPrice() = price
 
-  fun getPriceValue() = price.getValue()
-
   override fun hashCode() = Objects.hash(id, name)
 
   override fun equals(other: Any?): Boolean {
@@ -60,7 +59,7 @@ class Product(
   }
 
   override fun toString(): String {
-    return "Product(id: ${id}, name: ${name}, description: ${description})"
+    return "Product(id: ${id}, name: ${name}, description: ${description}, status: ${status}, stock: ${stock}, price: ${price})"
   }
 
 }

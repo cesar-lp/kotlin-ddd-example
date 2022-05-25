@@ -13,7 +13,7 @@ class ProductPresenterIml : ProductPresenter {
 
   override operator fun invoke(product: Product): ProductResponse {
     return ProductResponse(
-      id = product.id,
+      id = product.id.toString(),
       name = product.name,
       description = product.description,
       status = product.getStatus(),

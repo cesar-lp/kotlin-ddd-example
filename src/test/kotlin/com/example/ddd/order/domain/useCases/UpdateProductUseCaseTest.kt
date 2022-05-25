@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
@@ -36,17 +37,17 @@ class UpdateProductUseCaseTest {
 
   @Test
   fun `should update a product and return it`() {
-    val id = "prd-1"
+    val id = ID.of("prd-1")
 
     val existingProduct = Product(
-      id = "prd-1",
+      id = ID.of("prd-1"),
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       price = Money.of("2.50")
     )
 
     val expectedProductUpdated = Product(
-      id = "prd-1",
+      id = ID.of("prd-1"),
       name = "Beer",
       description = "Enjoy your day and night with a nice cold beer",
       price = Money.of("5.50")
@@ -70,7 +71,7 @@ class UpdateProductUseCaseTest {
 
   @Test
   fun `should throw an exception if the product to be updated does not exist`() {
-    val id = "prd-0"
+    val id = ID.of("prd-0")
 
     every { getProduct(any()) } throws ProductNotFoundException(id)
 
@@ -89,10 +90,10 @@ class UpdateProductUseCaseTest {
 
   @Test
   fun `should throw an exception if the new price is 0`() {
-    val id = "prd-1"
+    val id = ID.of("prd-1")
 
     val existingProduct = Product(
-      id = "prd-1",
+      id = ID.of("prd-1"),
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       price = Money.of("2.50")
@@ -115,10 +116,10 @@ class UpdateProductUseCaseTest {
 
   @Test
   fun `should throw an exception if the new price is less than 0`() {
-    val id = "prd-1"
+    val id = ID.of("prd-1")
 
     val existingProduct = Product(
-      id = "prd-1",
+      id = ID.of("prd-1"),
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       price = Money.of("2.50")

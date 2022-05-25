@@ -15,10 +15,9 @@ class ChangeProductStatusUseCaseImpl(
 ) : ChangeProductStatusUseCase {
 
   override fun invoke(id: String, status: String): Product {
-    val product = getProduct(id)
-
-    product.updateStatus(status)
-
-    return repository.save(product)
+    return getProduct(id).let {
+      it.updateStatus(status)
+      repository.save(it)
+    }
   }
 }

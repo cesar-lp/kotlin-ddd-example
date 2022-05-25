@@ -44,8 +44,8 @@ class CreateOrderUseCaseTest {
     ),
     Product(
       id = "prd-2",
-      name = "Stake",
-      description = "Big stake",
+      name = "Steak",
+      description = "Big steak",
       stock = 5,
       price = Money.of("7.50")
     ),
@@ -66,22 +66,8 @@ class CreateOrderUseCaseTest {
 
     val expectedOrderCreated = Order(
       products = mutableSetOf(
-        OrderProduct(
-          id = "prd-1",
-          name = "Beer",
-          description = "Enjoy your day with a nice cold beer",
-          unitPrice = Money.of("2.50"),
-          quantity = 4,
-          totalPrice = Money.of("10")
-        ),
-        OrderProduct(
-          id = "prd-2",
-          name = "Stake",
-          description = "Big stake",
-          unitPrice = Money.of("7.50"),
-          quantity = 2,
-          totalPrice = Money.of("15")
-        )
+        OrderProduct.of(existingProducts.first(), 4),
+        OrderProduct.of(existingProducts.elementAt(1), 2)
       ),
       total = Money.of("25")
     )
@@ -96,7 +82,7 @@ class CreateOrderUseCaseTest {
     verifyAll {
       productRepository.get(listOf("prd-1", "prd-2"))
       productRepository.save(any<Set<Product>>())
-      orderRepository.save(expectedOrderCreated)
+      orderRepository.save(any())
     }
   }
 

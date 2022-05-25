@@ -1,5 +1,6 @@
 package com.example.ddd.order.application.controllers
 
+import com.example.ddd.common.domain.models.ID
 import com.example.ddd.order.application.controllers.presenters.OrderPresenter
 import com.example.ddd.order.application.controllers.requests.CreateOrderRequest
 import com.example.ddd.order.application.controllers.responses.OrderResponse
@@ -24,7 +25,7 @@ class OrderController(
   @ResponseStatus(HttpStatus.CREATED)
   fun createOrder(@RequestBody request: CreateOrderRequest): OrderResponse {
     val newOrder = NewOrder(
-      request.lineItems.map { OrderLineItem(it.id, it.quantity) }
+      request.lineItems.map { OrderLineItem(ID.of(it.id), it.quantity) }
     )
 
     return present(createOrder(newOrder))
