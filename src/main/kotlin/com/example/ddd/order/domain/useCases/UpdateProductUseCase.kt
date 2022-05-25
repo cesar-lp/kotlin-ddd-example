@@ -22,6 +22,7 @@ class UpdateProductUseCaseImpl(
     product.apply {
       name = updatedProduct.name
       description = updatedProduct.description
+      updatePrice(updatedProduct.price)
       updatedAt = Instant.now()
     }
 

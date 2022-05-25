@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class CreateProductUseCaseTest {
@@ -27,8 +28,8 @@ class CreateProductUseCaseTest {
 
   @Test
   fun `should create product`() {
-    val newProduct = NewProduct(name = "Coke", description = "Coke can")
-    val expectedProductCreated = Product(name = "Coke", description = "Coke can")
+    val newProduct = NewProduct(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
+    val expectedProductCreated = Product(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
 
     every { repository.save(any()) } returns expectedProductCreated
 

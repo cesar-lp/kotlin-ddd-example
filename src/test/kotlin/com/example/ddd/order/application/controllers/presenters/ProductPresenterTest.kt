@@ -4,6 +4,7 @@ import com.example.ddd.order.application.controllers.responses.ProductResponse
 import com.example.ddd.order.domain.models.entities.Product
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class ProductPresenterTest {
 
@@ -14,7 +15,8 @@ class ProductPresenterTest {
     val product = Product(
       "prd-1",
       "Beer",
-      "Enjoy your day with a nice cold beer"
+      "Enjoy your day with a nice cold beer",
+      price = BigDecimal("2.50")
     )
 
     val expectedProductResponse = ProductResponse(
@@ -23,6 +25,7 @@ class ProductPresenterTest {
       description = "Enjoy your day with a nice cold beer",
       status = "enabled",
       stock = 0,
+      price = BigDecimal("2.50"),
       product.createdAt.toString(),
       product.updatedAt.toString()
     )

@@ -1,6 +1,7 @@
 package com.example.ddd.common.application.config
 
 import com.example.ddd.common.application.errors.ErrorResponse
+import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
 import com.example.ddd.order.domain.errors.InvalidProductStockException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
@@ -18,7 +19,13 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     return ResponseEntity(ErrorResponse.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND)
   }
 
-  @ExceptionHandler(value = [InvalidProductStatusException::class, InvalidProductStockException::class])
+  @ExceptionHandler(
+    value = [
+      InvalidProductPriceException::class,
+      InvalidProductStatusException::class,
+      InvalidProductStockException::class
+    ]
+  )
   fun handleInvalidProductStatusException(e: Exception): ResponseEntity<ErrorResponse> {
     return ResponseEntity(ErrorResponse.BAD_REQUEST, HttpStatus.BAD_REQUEST)
   }

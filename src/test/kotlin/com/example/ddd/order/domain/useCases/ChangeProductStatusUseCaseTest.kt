@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class ChangeProductStatusUseCaseTest {
@@ -40,14 +41,16 @@ class ChangeProductStatusUseCaseTest {
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
-      status = ProductStatus.ENABLED
+      status = ProductStatus.ENABLED,
+      price = BigDecimal("2.50")
     )
 
     val expectedProductUpdated = Product(
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day and night with a nice cold beer",
-      status = ProductStatus.DISABLED
+      status = ProductStatus.DISABLED,
+      price = BigDecimal("2.50")
     )
 
     every { getProduct(any()) } returns existingProduct
@@ -87,7 +90,8 @@ class ChangeProductStatusUseCaseTest {
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
-      status = ProductStatus.ENABLED
+      status = ProductStatus.ENABLED,
+      price = BigDecimal("2.50")
     )
 
     every { getProduct(any()) } returns existingProduct

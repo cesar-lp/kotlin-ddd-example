@@ -21,6 +21,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
+import java.math.BigDecimal
 
 @SpringBootTest(
   classes = [App::class],
@@ -76,7 +77,7 @@ class ProductControllerTest {
     @Test
     fun `should get a 201 with a product response`() {
       val jsonResponseFilePath = "/controllers/product/createProduct.json"
-      val request = CreateProductRequest(name = "Coke", description = "Coke can")
+      val request = CreateProductRequest(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
 
       val response = restTemplate.postForEntity("/products", request, ProductResponse::class.java)
 
@@ -97,9 +98,9 @@ class ProductControllerTest {
   inner class UpdateProduct {
 
     @Test
-    fun `should get 200 with a product response`() {
+    fun `should update a product`() {
       val jsonResponseFilePath = "/controllers/product/updateProduct.json"
-      val request = UpdateProductRequest("New product name", "New product description")
+      val request = UpdateProductRequest("New product name", "New product description", BigDecimal("2.50"))
 
       val response = restTemplate.exchange(
         "/products/prd-2", HttpMethod.PUT, HttpEntity(request), ProductResponse::class.java
@@ -116,8 +117,8 @@ class ProductControllerTest {
     }
 
     @Test
-    fun `should get 404 with an error response`() {
-      val request = UpdateProductRequest("New product name", "New product description")
+    fun `should fail to update a non existing product`() {
+      val request = UpdateProductRequest("New product name", "New product description", price = BigDecimal("2.50"))
 
       val response = restTemplate.exchange(
         "/products/prd-0", HttpMethod.PUT, HttpEntity(request), ErrorResponse::class.java
@@ -131,6 +132,25 @@ class ProductControllerTest {
 
       assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+      assertEquals(expectedResponse, response.body)
+    }
+
+    @Test
+    fun `should fail to update a product with an invalid price`() {
+      val request = UpdateProductRequest("New product name", "New product description", price = BigDecimal("0"))
+
+      val response = restTemplate.exchange(
+        "/products/prd-1", HttpMethod.PUT, HttpEntity(request), ErrorResponse::class.java
+      )
+
+      val expectedResponse = ErrorResponse(
+        "BAD_REQUEST",
+        "Bad request",
+        "Bad request"
+      )
+
+      assertNotNull(response)
+      assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
       assertEquals(expectedResponse, response.body)
     }
   }

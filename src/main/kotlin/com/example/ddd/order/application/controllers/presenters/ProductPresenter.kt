@@ -13,13 +13,14 @@ class ProductPresenterIml : ProductPresenter {
 
   override operator fun invoke(product: Product): ProductResponse {
     return ProductResponse(
-      product.id,
-      product.name,
-      product.description,
-      product.getStatus(),
-      product.getStock(),
-      product.createdAt.toString(),
-      product.updatedAt.toString()
+      id = product.id,
+      name = product.name,
+      description = product.description,
+      status = product.getStatus(),
+      stock = product.getStock(),
+      price = product.getPrice(),
+      createdAt = product.createdAt.toString(),
+      updatedAt = product.updatedAt.toString()
     )
   }
 

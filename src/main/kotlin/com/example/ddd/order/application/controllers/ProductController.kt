@@ -40,7 +40,8 @@ class ProductController(
   fun create(@RequestBody request: CreateProductRequest): ProductResponse {
     val newProduct = NewProduct(
       name = request.name,
-      description = request.description
+      description = request.description,
+      price = request.price
     )
 
     return present(createProduct(newProduct))
@@ -55,7 +56,8 @@ class ProductController(
   fun update(@PathVariable id: String, @RequestBody request: UpdateProductRequest): ProductResponse {
     val updatedProduct = UpdatedProduct(
       name = request.name,
-      description = request.description
+      description = request.description,
+      price = request.price
     )
 
     return present(updateProduct(id, updatedProduct))

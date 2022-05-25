@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.models.UpdatedProduct
 import com.example.ddd.order.domain.models.entities.Product
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class UpdateProductUseCaseTest {
@@ -35,13 +37,27 @@ class UpdateProductUseCaseTest {
   fun `should update a product and return it`() {
     val id = "prd-1"
 
-    val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
-    val expectedProductUpdated = Product("prd-1", "Beer", "Enjoy your day and night with a nice cold beer")
+    val existingProduct = Product(
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day with a nice cold beer",
+      price = BigDecimal("2.50")
+    )
+
+    val expectedProductUpdated = Product(
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day and night with a nice cold beer",
+      price = BigDecimal("5.50")
+    )
 
     every { getProduct(any()) } returns existingProduct
     every { repository.save(any()) } returns expectedProductUpdated
 
-    val productUpdated = updateProduct(id, UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer"))
+    val productUpdated = updateProduct(
+      id,
+      UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer", price = BigDecimal("5.50"))
+    )
 
     assertEquals(expectedProductUpdated, productUpdated)
 
@@ -58,7 +74,62 @@ class UpdateProductUseCaseTest {
     every { getProduct(any()) } throws ProductNotFoundException(id)
 
     assertThrows<ProductNotFoundException> {
-      updateProduct(id, UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer"))
+      updateProduct(
+        id,
+        UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer", price = BigDecimal("2.50"))
+      )
+
+      verifyAll {
+        getProduct(id)
+        repository.save(any()) wasNot Called
+      }
+    }
+  }
+
+  @Test
+  fun `should throw an exception if the new price is 0`() {
+    val id = "prd-1"
+
+    val existingProduct = Product(
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day with a nice cold beer",
+      price = BigDecimal("2.50")
+    )
+
+    every { getProduct(any()) } returns existingProduct
+
+    assertThrows<InvalidProductPriceException> {
+      updateProduct(
+        id,
+        UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer", price = BigDecimal("0"))
+      )
+
+      verifyAll {
+        getProduct(id)
+        repository.save(any()) wasNot Called
+      }
+    }
+  }
+
+  @Test
+  fun `should throw an exception if the new price is less than 0`() {
+    val id = "prd-1"
+
+    val existingProduct = Product(
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day with a nice cold beer",
+      price = BigDecimal("2.50")
+    )
+
+    every { getProduct(any()) } returns existingProduct
+
+    assertThrows<InvalidProductPriceException> {
+      updateProduct(
+        id,
+        UpdatedProduct("Beer", "Enjoy your day and night with a nice cold beer", price = BigDecimal("-1"))
+      )
 
       verifyAll {
         getProduct(id)

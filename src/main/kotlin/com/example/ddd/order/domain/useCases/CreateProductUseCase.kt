@@ -17,7 +17,8 @@ class CreateProductUseCaseImpl(
   override fun invoke(newProduct: NewProduct): Product {
     val product = Product(
       name = newProduct.name,
-      description = newProduct.description
+      description = newProduct.description,
+      price = newProduct.price
     )
 
     return repository.save(product)

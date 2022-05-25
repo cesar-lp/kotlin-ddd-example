@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
 class InMemoryProductRepositoryTest {
 
@@ -22,7 +23,7 @@ class InMemoryProductRepositoryTest {
 
     @Test
     fun `should return a product`() {
-      val expectedProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer")
+      val expectedProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer", price = BigDecimal("2.50"))
       val product = repository.get("prd-1")
 
       assertEquals(expectedProduct, product)
@@ -46,15 +47,17 @@ class InMemoryProductRepositoryTest {
 
     @Test
     fun `should save a new product`() {
-      val savedProduct = repository.save(Product(name = "Coke", description = "Coke can"))
-      val expectedProductSaved = Product(id = "prd-4", name = "Coke", description = "Coke can")
+      val savedProduct = repository.save(Product(name = "Coke", description = "Coke can", price = BigDecimal("2.50")))
+      val expectedProductSaved =
+        Product(id = "prd-4", name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
 
       assertEquals(expectedProductSaved, savedProduct)
     }
 
     @Test
     fun `should update an existing product`() {
-      val updatedProduct = Product(id = "prd-2", name = "Stake", description = "Very big stake")
+      val updatedProduct =
+        Product(id = "prd-2", name = "Stake", description = "Very big stake", price = BigDecimal("2.50"))
 
       repository.save(updatedProduct)
 
