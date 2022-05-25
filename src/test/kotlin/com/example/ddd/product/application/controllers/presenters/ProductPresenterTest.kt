@@ -22,6 +22,7 @@ class ProductPresenterTest {
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       status = "enabled",
+      stock = 0,
       product.createdAt.toString(),
       product.updatedAt.toString()
     )

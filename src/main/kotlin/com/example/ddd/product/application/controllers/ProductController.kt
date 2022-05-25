@@ -1,12 +1,14 @@
 package com.example.ddd.product.application.controllers
 
 import com.example.ddd.product.application.controllers.presenters.ProductPresenter
+import com.example.ddd.product.application.controllers.requests.AddProductStockRequest
 import com.example.ddd.product.application.controllers.requests.ChangeProductStatusRequest
 import com.example.ddd.product.application.controllers.requests.CreateProductRequest
 import com.example.ddd.product.application.controllers.requests.UpdateProductRequest
 import com.example.ddd.product.application.controllers.responses.ProductResponse
 import com.example.ddd.product.domain.models.NewProduct
 import com.example.ddd.product.domain.models.UpdatedProduct
+import com.example.ddd.product.domain.useCases.AddProductStockUseCase
 import com.example.ddd.product.domain.useCases.ChangeProductStatusUseCase
 import com.example.ddd.product.domain.useCases.CreateProductUseCase
 import com.example.ddd.product.domain.useCases.GetProductUseCase
@@ -29,6 +31,7 @@ class ProductController(
   private val createProduct: CreateProductUseCase,
   private val updateProduct: UpdateProductUseCase,
   private val changeProductStatus: ChangeProductStatusUseCase,
+  private val addStock: AddProductStockUseCase,
   private val present: ProductPresenter
 ) {
 
@@ -63,4 +66,8 @@ class ProductController(
     return present(changeProductStatus(id, request.status))
   }
 
+  @PatchMapping("/{id}/stock")
+  fun addStock(@PathVariable id: String, @RequestBody request: AddProductStockRequest): ProductResponse {
+    return present(addStock(id, request.units))
+  }
 }

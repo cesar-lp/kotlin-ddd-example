@@ -10,6 +10,7 @@ data class ProductResponse(
   val name: String,
   val description: String,
   val status: String,
+  val stock: Int,
   val createdAt: String,
   val updatedAt: String
 ) : Serializable

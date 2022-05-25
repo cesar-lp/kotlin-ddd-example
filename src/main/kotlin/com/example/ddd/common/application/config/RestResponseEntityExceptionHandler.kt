@@ -2,6 +2,7 @@ package com.example.ddd.common.application.config
 
 import com.example.ddd.common.application.errors.ErrorResponse
 import com.example.ddd.product.domain.errors.InvalidProductStatusException
+import com.example.ddd.product.domain.errors.InvalidProductStockException
 import com.example.ddd.product.domain.errors.ProductNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,7 +18,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     return ResponseEntity(ErrorResponse.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND)
   }
 
-  @ExceptionHandler(InvalidProductStatusException::class)
+  @ExceptionHandler(value = [InvalidProductStatusException::class, InvalidProductStockException::class])
   fun handleInvalidProductStatusException(e: Exception): ResponseEntity<ErrorResponse> {
     return ResponseEntity(ErrorResponse.BAD_REQUEST, HttpStatus.BAD_REQUEST)
   }

@@ -1,6 +1,7 @@
 package com.example.ddd.product.infrastructure.repositories
 
 import com.example.ddd.product.domain.models.entities.Product
+import com.example.ddd.product.domain.models.entities.ProductStatus
 import com.example.ddd.product.domain.repositories.ProductRepository
 import org.springframework.stereotype.Repository
 
@@ -8,9 +9,27 @@ import org.springframework.stereotype.Repository
 class InMemoryProductRepository : ProductRepository {
 
   private val products = mutableListOf(
-    Product("prd-1", "Beer", "Enjoy your day with a nice cold beer"),
-    Product("prd-2", "Stake", "Big stake"),
-    Product("prd-3", "Chips", "The best chips in town"),
+    Product(
+      id = "prd-1",
+      name = "Beer",
+      description = "Enjoy your day with a nice cold beer",
+      status = ProductStatus.ENABLED,
+      stock = 10
+    ),
+    Product(
+      id = "prd-2",
+      name = "Stake",
+      description = "Big stake",
+      status = ProductStatus.ENABLED,
+      stock = 5
+    ),
+    Product(
+      id = "prd-3",
+      name = "Chips",
+      description = "The best chips in town",
+      status = ProductStatus.ENABLED,
+      stock = 20
+    ),
   )
 
   override fun getAll(): List<Product> {

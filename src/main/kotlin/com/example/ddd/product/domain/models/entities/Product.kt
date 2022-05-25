@@ -1,6 +1,7 @@
 package com.example.ddd.product.domain.models.entities
 
 import com.example.ddd.product.domain.errors.InvalidProductStatusException
+import com.example.ddd.product.domain.errors.InvalidProductStockException
 import java.time.Instant
 import java.util.*
 
@@ -9,6 +10,7 @@ class Product(
   var name: String,
   var description: String,
   private var status: ProductStatus = ProductStatus.ENABLED,
+  private var stock: Int = 0,
   val createdAt: Instant = Instant.now(),
   var updatedAt: Instant = Instant.now()
 ) {
@@ -22,6 +24,15 @@ class Product(
   }
 
   fun getStatus() = status.description
+
+  fun addStock(units: Int) {
+    if (units <= 0) {
+      throw InvalidProductStockException(id, units)
+    }
+    stock += units
+  }
+
+  fun getStock() = stock
 
   override fun hashCode() = Objects.hash(id, name)
 
