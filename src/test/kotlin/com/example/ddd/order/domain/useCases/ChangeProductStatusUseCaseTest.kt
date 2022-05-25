@@ -54,7 +54,7 @@ class ChangeProductStatusUseCaseTest {
     )
 
     every { getProduct(any()) } returns existingProduct
-    every { repository.save(any()) } returns expectedProductUpdated
+    every { repository.save(any<Product>()) } returns expectedProductUpdated
 
     val productUpdated = changeProductStatus(id, "disabled")
 
@@ -77,7 +77,7 @@ class ChangeProductStatusUseCaseTest {
 
       verifyAll {
         getProduct(id)
-        repository.save(any()) wasNot Called
+        repository.save(any<Product>()) wasNot Called
       }
     }
   }
@@ -101,7 +101,7 @@ class ChangeProductStatusUseCaseTest {
 
       verifyAll {
         getProduct(id)
-        repository.save(any()) wasNot Called
+        repository.save(any<Product>()) wasNot Called
       }
     }
   }

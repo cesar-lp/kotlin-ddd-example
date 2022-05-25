@@ -52,7 +52,7 @@ class UpdateProductUseCaseTest {
     )
 
     every { getProduct(any()) } returns existingProduct
-    every { repository.save(any()) } returns expectedProductUpdated
+    every { repository.save(any<Product>()) } returns expectedProductUpdated
 
     val productUpdated = updateProduct(
       id,
@@ -81,7 +81,7 @@ class UpdateProductUseCaseTest {
 
       verifyAll {
         getProduct(id)
-        repository.save(any()) wasNot Called
+        repository.save(any<Product>()) wasNot Called
       }
     }
   }
@@ -107,7 +107,7 @@ class UpdateProductUseCaseTest {
 
       verifyAll {
         getProduct(id)
-        repository.save(any()) wasNot Called
+        repository.save(any<Product>()) wasNot Called
       }
     }
   }
@@ -133,7 +133,7 @@ class UpdateProductUseCaseTest {
 
       verifyAll {
         getProduct(id)
-        repository.save(any()) wasNot Called
+        repository.save(any<Product>()) wasNot Called
       }
     }
   }

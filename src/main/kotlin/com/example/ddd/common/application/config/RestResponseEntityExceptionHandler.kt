@@ -5,6 +5,7 @@ import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
 import com.example.ddd.order.domain.errors.InvalidProductStockException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
+import com.example.ddd.order.domain.errors.ProductsNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -14,7 +15,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
-  @ExceptionHandler(ProductNotFoundException::class)
+  @ExceptionHandler(
+    value = [
+      ProductNotFoundException::class,
+      ProductsNotFoundException::class
+    ]
+  )
   fun handleResourceNotFoundException(e: Exception): ResponseEntity<ErrorResponse> {
     return ResponseEntity(ErrorResponse.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND)
   }

@@ -34,8 +34,8 @@ class Product(
     price = newPrice
   }
 
-  fun addStock(units: Int) {
-    if (units <= 0) {
+  fun updateStock(units: Int) {
+    if ((stock + units) < 0) {
       throw InvalidProductStockException(id, units)
     }
     stock += units

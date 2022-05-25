@@ -33,7 +33,7 @@ class GetProductUseCaseTest {
 
     val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer", price = BigDecimal("2.50"))
 
-    every { repository.get(any()) } returns existingProduct
+    every { repository.get(any<String>()) } returns existingProduct
 
     val productFound = getProduct(id)
 
@@ -46,7 +46,7 @@ class GetProductUseCaseTest {
   fun `should throw an exception if the product retrieved from DB is null`() {
     val id = "prd-0"
 
-    every { repository.get(any()) } returns null
+    every { repository.get(any<String>()) } returns null
 
     assertThrows<ProductNotFoundException> {
       getProduct(id)

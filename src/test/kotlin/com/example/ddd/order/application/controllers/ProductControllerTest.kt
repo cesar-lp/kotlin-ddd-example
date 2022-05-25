@@ -1,6 +1,5 @@
 package com.example.ddd.order.application.controllers
 
-import com.example.ddd.App
 import com.example.ddd.common.application.errors.ErrorResponse
 import com.example.ddd.order.application.controllers.requests.AddProductStockRequest
 import com.example.ddd.order.application.controllers.requests.ChangeProductStatusRequest
@@ -14,23 +13,13 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
 import java.math.BigDecimal
 
-@SpringBootTest(
-  classes = [App::class],
-  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-class ProductControllerTest {
-
-  @Autowired
-  private lateinit var restTemplate: TestRestTemplate
+class ProductControllerTest : BaseControllerTest() {
 
   @Nested
   @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
@@ -263,7 +252,7 @@ class ProductControllerTest {
 
     @Test
     fun `should fail to increment the stock with an invalid value`() {
-      val request = AddProductStockRequest(-5)
+      val request = AddProductStockRequest(-11)
 
       val response = restTemplate.exchange(
         "/products/prd-1/stock", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java

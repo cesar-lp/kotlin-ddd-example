@@ -43,7 +43,7 @@ class AddProductStockUseCaseTest {
       Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 15, price = BigDecimal("2.50"))
 
     every { getProduct(any()) } returns existingProduct
-    every { repository.save(any()) } returns expectedProductUpdated
+    every { repository.save(any<Product>()) } returns expectedProductUpdated
 
     val productUpdated = addStock(id, stockUnits)
 
@@ -64,14 +64,14 @@ class AddProductStockUseCaseTest {
       addStock(id, stockUnits)
 
       verify { getProduct(id) }
-      verify { repository.save(any()) wasNot Called }
+      verify { repository.save(any<Product>()) wasNot Called }
     }
   }
 
   @Test
-  fun `should throw an exception while updating stock with a negative value`() {
+  fun `should throw an exception if the resulting stock is negative`() {
     val id = "prd-1"
-    val stockUnits = -5
+    val stockUnits = -11
 
     val existingProduct =
       Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 10, price = BigDecimal("2.50"))
@@ -82,7 +82,7 @@ class AddProductStockUseCaseTest {
       addStock(id, stockUnits)
 
       verify { getProduct(id) }
-      verify { repository.save(any()) wasNot Called }
+      verify { repository.save(any<Product>()) wasNot Called }
     }
   }
 }

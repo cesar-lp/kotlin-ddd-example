@@ -31,7 +31,7 @@ class CreateProductUseCaseTest {
     val newProduct = NewProduct(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
     val expectedProductCreated = Product(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
 
-    every { repository.save(any()) } returns expectedProductCreated
+    every { repository.save(any<Product>()) } returns expectedProductCreated
 
     assertEquals(expectedProductCreated, createProduct(newProduct))
 
