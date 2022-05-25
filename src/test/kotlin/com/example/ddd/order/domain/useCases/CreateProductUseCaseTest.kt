@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.NewProduct
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.ProductRepository
@@ -29,7 +30,7 @@ class CreateProductUseCaseTest {
   @Test
   fun `should create product`() {
     val newProduct = NewProduct(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
-    val expectedProductCreated = Product(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
+    val expectedProductCreated = Product(name = "Coke", description = "Coke can", price = Money.of("2.50"))
 
     every { repository.save(any<Product>()) } returns expectedProductCreated
 

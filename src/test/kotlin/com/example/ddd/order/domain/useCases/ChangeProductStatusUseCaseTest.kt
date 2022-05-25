@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.models.entities.Product
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class ChangeProductStatusUseCaseTest {
@@ -42,7 +42,7 @@ class ChangeProductStatusUseCaseTest {
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       status = ProductStatus.ENABLED,
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     )
 
     val expectedProductUpdated = Product(
@@ -50,7 +50,7 @@ class ChangeProductStatusUseCaseTest {
       name = "Beer",
       description = "Enjoy your day and night with a nice cold beer",
       status = ProductStatus.DISABLED,
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     )
 
     every { getProduct(any()) } returns existingProduct
@@ -91,7 +91,7 @@ class ChangeProductStatusUseCaseTest {
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       status = ProductStatus.ENABLED,
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     )
 
     every { getProduct(any()) } returns existingProduct

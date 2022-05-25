@@ -17,7 +17,7 @@ class OrderPresenterImpl(
     return OrderResponse(
       id = order.id,
       products = order.products.map { presentOrderProduct(it) },
-      totalPrice = order.total,
+      totalPrice = order.getTotalPrice(),
       createdAt = order.createdAt.toString(),
       updatedAt = order.updatedAt.toString()
     )

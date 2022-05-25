@@ -16,9 +16,9 @@ class OrderProductPresenterImpl : OrderProductPresenter {
       id = orderProduct.id,
       name = orderProduct.name,
       description = orderProduct.description,
-      unitPrice = orderProduct.unitPrice,
+      unitPrice = orderProduct.getUnitPrice().getValue(),
       quantity = orderProduct.quantity,
-      totalPrice = orderProduct.totalPrice
+      totalPrice = orderProduct.getTotalPrice().getValue()
     )
   }
 

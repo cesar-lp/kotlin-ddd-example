@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.models.UpdatedProduct
@@ -41,14 +42,14 @@ class UpdateProductUseCaseTest {
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     )
 
     val expectedProductUpdated = Product(
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day and night with a nice cold beer",
-      price = BigDecimal("5.50")
+      price = Money.of("5.50")
     )
 
     every { getProduct(any()) } returns existingProduct
@@ -94,7 +95,7 @@ class UpdateProductUseCaseTest {
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     )
 
     every { getProduct(any()) } returns existingProduct
@@ -120,7 +121,7 @@ class UpdateProductUseCaseTest {
       id = "prd-1",
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     )
 
     every { getProduct(any()) } returns existingProduct

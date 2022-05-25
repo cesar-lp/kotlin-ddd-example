@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.NewProduct
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.ProductRepository
@@ -18,7 +19,7 @@ class CreateProductUseCaseImpl(
     val product = Product(
       name = newProduct.name,
       description = newProduct.description,
-      price = newProduct.price
+      price = Money.of(newProduct.price)
     )
 
     return repository.save(product)

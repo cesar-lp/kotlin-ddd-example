@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductStockException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.models.entities.Product
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class AddProductStockUseCaseTest {
@@ -37,10 +37,21 @@ class AddProductStockUseCaseTest {
     val id = "prd-1"
     val stockUnits = 5
 
-    val existingProduct =
-      Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 10, price = BigDecimal("2.50"))
-    val expectedProductUpdated =
-      Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 15, price = BigDecimal("2.50"))
+    val existingProduct = Product(
+      id = "prd-1",
+      name = "Coke",
+      description = "Coke can",
+      stock = 10,
+      price = Money.of("2.50")
+    )
+
+    val expectedProductUpdated = Product(
+      id = "prd-1",
+      name = "Coke",
+      description = "Coke can",
+      stock = 15,
+      price = Money.of("2.50")
+    )
 
     every { getProduct(any()) } returns existingProduct
     every { repository.save(any<Product>()) } returns expectedProductUpdated
@@ -74,7 +85,7 @@ class AddProductStockUseCaseTest {
     val stockUnits = -11
 
     val existingProduct =
-      Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 10, price = BigDecimal("2.50"))
+      Product(id = "prd-1", name = "Coke", description = "Coke can", stock = 10, price = Money.of("2.50"))
 
     every { getProduct(any()) } returns existingProduct
 

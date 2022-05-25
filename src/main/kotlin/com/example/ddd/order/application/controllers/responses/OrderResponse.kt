@@ -3,7 +3,6 @@ package com.example.ddd.order.application.controllers.responses
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import java.io.Serializable
-import java.math.BigDecimal
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class OrderProductResponse(
@@ -11,15 +10,15 @@ data class OrderProductResponse(
   val name: String,
   val description: String,
   val quantity: Int,
-  val unitPrice: BigDecimal,
-  val totalPrice: BigDecimal
+  val unitPrice: String,
+  val totalPrice: String
 ) : Serializable
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class OrderResponse(
   val id: String,
   val products: List<OrderProductResponse>,
-  val totalPrice: BigDecimal,
+  val totalPrice: String,
   val createdAt: String,
   val updatedAt: String
 ) : Serializable

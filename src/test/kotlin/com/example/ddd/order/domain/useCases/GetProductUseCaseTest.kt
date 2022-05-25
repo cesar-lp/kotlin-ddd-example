@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.ProductRepository
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class GetProductUseCaseTest {
@@ -31,7 +31,7 @@ class GetProductUseCaseTest {
   fun `should get a product from DB and return it`() {
     val id = "prd-1"
 
-    val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer", price = BigDecimal("2.50"))
+    val existingProduct = Product("prd-1", "Beer", "Enjoy your day with a nice cold beer", price = Money.of("2.50"))
 
     every { repository.get(any<String>()) } returns existingProduct
 

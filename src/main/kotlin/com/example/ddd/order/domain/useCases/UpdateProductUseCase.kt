@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.UpdatedProduct
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.ProductRepository
@@ -22,7 +23,7 @@ class UpdateProductUseCaseImpl(
     product.apply {
       name = updatedProduct.name
       description = updatedProduct.description
-      updatePrice(updatedProduct.price)
+      updatePrice(Money.of(updatedProduct.price))
       updatedAt = Instant.now()
     }
 

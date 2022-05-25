@@ -1,16 +1,28 @@
 package com.example.ddd.order.domain.models.entities
 
-import java.math.BigDecimal
+import com.example.ddd.common.domain.models.Currency
+import com.example.ddd.common.domain.models.Money
 import java.time.Instant
 import java.util.*
 
 class Order(
   var id: String = "",
-  val products: Set<OrderProduct> = emptySet(),
-  var total: BigDecimal,
+  val products: MutableSet<OrderProduct> = mutableSetOf(),
+  private var total: Money = Money.ZERO(Currency.USD),
   val createdAt: Instant = Instant.now(),
   var updatedAt: Instant = Instant.now()
 ) {
+
+  fun getTotalPrice() = total.getValue()
+
+  fun addProduct(product: Product, quantity: Int) {
+    val orderProduct = OrderProduct.of(product, quantity)
+
+    products.add(orderProduct)
+    total += orderProduct.getTotalPrice()
+
+    product.updateStock(-quantity)
+  }
 
   override fun hashCode() = Objects.hash(id, products.map { it.id })
 

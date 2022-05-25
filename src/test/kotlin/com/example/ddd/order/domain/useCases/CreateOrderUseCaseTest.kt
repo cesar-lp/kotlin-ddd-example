@@ -1,5 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductStockException
 import com.example.ddd.order.domain.errors.ProductsNotFoundException
 import com.example.ddd.order.domain.models.NewOrder
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 class CreateOrderUseCaseTest {
@@ -40,14 +40,14 @@ class CreateOrderUseCaseTest {
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       stock = 10,
-      price = BigDecimal("2.50")
+      price = Money.of("2.50")
     ),
     Product(
       id = "prd-2",
       name = "Stake",
       description = "Big stake",
       stock = 5,
-      price = BigDecimal("7.50")
+      price = Money.of("7.50")
     ),
   )
 
@@ -65,25 +65,25 @@ class CreateOrderUseCaseTest {
     )
 
     val expectedOrderCreated = Order(
-      products = setOf(
+      products = mutableSetOf(
         OrderProduct(
           id = "prd-1",
           name = "Beer",
           description = "Enjoy your day with a nice cold beer",
-          unitPrice = BigDecimal("2.50"),
+          unitPrice = Money.of("2.50"),
           quantity = 4,
-          totalPrice = BigDecimal("10")
+          totalPrice = Money.of("10")
         ),
         OrderProduct(
           id = "prd-2",
           name = "Stake",
           description = "Big stake",
-          unitPrice = BigDecimal("7.50"),
+          unitPrice = Money.of("7.50"),
           quantity = 2,
-          totalPrice = BigDecimal("15")
+          totalPrice = Money.of("15")
         )
       ),
-      total = BigDecimal("25")
+      total = Money.of("25")
     )
 
     every { productRepository.save(any<Set<Product>>()) } just runs
@@ -112,7 +112,7 @@ class CreateOrderUseCaseTest {
         name = "Beer",
         description = "Enjoy your day with a nice cold beer",
         stock = 10,
-        price = BigDecimal("2.50")
+        price = Money.of("2.50")
       ),
     )
 
@@ -141,7 +141,7 @@ class CreateOrderUseCaseTest {
         name = "Beer",
         description = "Enjoy your day with a nice cold beer",
         stock = 10,
-        price = BigDecimal("2.50")
+        price = Money.of("2.50")
       ),
     )
 

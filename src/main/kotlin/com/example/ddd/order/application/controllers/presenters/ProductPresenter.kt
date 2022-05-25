@@ -18,7 +18,7 @@ class ProductPresenterIml : ProductPresenter {
       description = product.description,
       status = product.getStatus(),
       stock = product.getStock(),
-      price = product.getPrice(),
+      price = product.getPrice().getValue(),
       createdAt = product.createdAt.toString(),
       updatedAt = product.updatedAt.toString()
     )

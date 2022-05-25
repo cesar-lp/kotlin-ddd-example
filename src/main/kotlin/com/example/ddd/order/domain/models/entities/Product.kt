@@ -1,9 +1,9 @@
 package com.example.ddd.order.domain.models.entities
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
 import com.example.ddd.order.domain.errors.InvalidProductStockException
-import java.math.BigDecimal
 import java.time.Instant
 import java.util.*
 
@@ -13,7 +13,7 @@ class Product(
   var description: String,
   private var status: ProductStatus = ProductStatus.ENABLED,
   private var stock: Int = 0,
-  private var price: BigDecimal,
+  private var price: Money,
   val createdAt: Instant = Instant.now(),
   var updatedAt: Instant = Instant.now()
 ) {
@@ -26,14 +26,15 @@ class Product(
     updatedAt = Instant.now()
   }
 
-  fun updatePrice(newPrice: BigDecimal) {
-    if (newPrice <= BigDecimal.ZERO) {
+  fun updatePrice(newPrice: Money) {
+    if (newPrice.isZeroOrNegative()) {
       throw InvalidProductPriceException(id, newPrice)
     }
 
     price = newPrice
   }
 
+  // TODO: separate into function to decrement/increment stock
   fun updateStock(units: Int) {
     if ((stock + units) < 0) {
       throw InvalidProductStockException(id, units)
@@ -46,6 +47,8 @@ class Product(
   fun getStock() = stock
 
   fun getPrice() = price
+
+  fun getPriceValue() = price.getValue()
 
   override fun hashCode() = Objects.hash(id, name)
 

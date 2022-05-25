@@ -1,5 +1,6 @@
 package com.example.ddd.order.infrastructure.repositories
 
+import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.ProductRepository
 import org.springframework.stereotype.Repository
@@ -14,21 +15,21 @@ class InMemoryProductRepository : ProductRepository {
       name = "Beer",
       description = "Enjoy your day with a nice cold beer",
       stock = 10,
-      price = BigDecimal("2.50")
+      price = Money.of(BigDecimal("2.50"))
     ),
     Product(
       id = "prd-2",
       name = "Stake",
       description = "Big stake",
       stock = 5,
-      price = BigDecimal("7.50")
+      price = Money.of(BigDecimal("7.50"))
     ),
     Product(
       id = "prd-3",
       name = "Chips",
       description = "The best chips in town",
       stock = 20,
-      price = BigDecimal("3.00")
+      price = Money.of(BigDecimal("3.00"))
     ),
   )
 
