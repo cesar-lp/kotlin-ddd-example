@@ -1,6 +1,5 @@
 package com.example.ddd.order.domain.models.entities
 
-import com.example.ddd.common.domain.models.Currency
 import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
 import java.time.Instant
@@ -9,7 +8,7 @@ import java.util.*
 class Order(
   val id: String = ID.generate("ord"),
   val products: MutableSet<OrderProduct> = mutableSetOf(),
-  private var total: Money = Money.ZERO(Currency.USD),
+  private var total: Money = Money.ZERO(),
   val createdAt: Instant = Instant.now(),
   var updatedAt: Instant = Instant.now()
 ) {
@@ -17,12 +16,19 @@ class Order(
   fun getTotalPrice() = total.getValue()
 
   fun addProduct(product: Product, quantity: Int) {
-    val orderProduct = OrderProduct.of(product, quantity)
-
-    products.add(orderProduct)
-    total += orderProduct.getTotalPrice()
-
     product.updateStock(-quantity)
+
+    val existingOrderProduct = products.firstOrNull { it.productId == product.id }
+
+    total += if (existingOrderProduct != null) {
+      existingOrderProduct.updateQuantity(quantity)
+      existingOrderProduct.getUnitPrice() * quantity
+    } else {
+      val orderProduct = OrderProduct.of(product, quantity)
+
+      products.add(orderProduct)
+      orderProduct.getTotalPrice()
+    }
   }
 
   override fun hashCode() = Objects.hash(id, products.map { it.id })

@@ -4,6 +4,7 @@ import com.example.ddd.common.application.errors.ErrorResponse
 import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
 import com.example.ddd.order.domain.errors.InvalidProductStockException
+import com.example.ddd.order.domain.errors.OrderNotFoundException
 import com.example.ddd.order.domain.errors.ProductNotFoundException
 import com.example.ddd.order.domain.errors.ProductsNotFoundException
 import org.springframework.http.HttpStatus
@@ -17,6 +18,7 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
   @ExceptionHandler(
     value = [
+      OrderNotFoundException::class,
       ProductNotFoundException::class,
       ProductsNotFoundException::class
     ]

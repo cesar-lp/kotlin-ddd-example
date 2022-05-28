@@ -11,11 +11,13 @@ class Money private constructor(private val value: BigDecimal, private val curre
 
     fun of(value: BigDecimal) = Money(value, Currency.USD)
 
-    fun ZERO(currency: Currency) = Money(BigDecimal.ZERO, currency)
+    fun ZERO() = Money(BigDecimal.ZERO, Currency.USD)
 
   }
 
   operator fun plus(other: Money) = Money(value.plus(other.value), currency)
+
+  operator fun minus(other: Money) = Money(value.minus(other.value), currency)
 
   operator fun times(quantity: Int) = Money(value.times(quantity.toBigDecimal()), currency)
 

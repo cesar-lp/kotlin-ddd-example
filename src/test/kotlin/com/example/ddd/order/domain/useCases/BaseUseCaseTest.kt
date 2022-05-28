@@ -3,6 +3,7 @@ package com.example.ddd.order.domain.useCases
 import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.entities.Product
+import com.example.ddd.order.domain.repositories.OrderRepository
 import com.example.ddd.order.domain.repositories.ProductRepository
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -14,6 +15,9 @@ open class BaseUseCaseTest {
 
   @MockK
   protected lateinit var productRepository: ProductRepository
+
+  @MockK
+  protected lateinit var orderRepository: OrderRepository
 
   protected val beerProduct = Product(
     id = ID.of("prd-8f6f04dc-dc73-11ec-9d64-0242ac120002"),

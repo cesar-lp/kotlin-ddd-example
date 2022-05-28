@@ -27,6 +27,11 @@ class OrderProduct private constructor(
     }
   }
 
+  fun updateQuantity(quantity: Int) {
+    this.quantity += quantity
+    totalPrice += unitPrice * quantity
+  }
+
   fun getUnitPrice() = unitPrice
 
   fun getTotalPrice() = totalPrice
