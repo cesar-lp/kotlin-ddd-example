@@ -7,6 +7,7 @@ import java.util.*
 
 class Order(
   val id: String = ID.generate("ord"),
+  val client: Client,
   val products: MutableSet<OrderProduct> = mutableSetOf(),
   private var total: Money = Money.ZERO(),
   val createdAt: Instant = Instant.now(),

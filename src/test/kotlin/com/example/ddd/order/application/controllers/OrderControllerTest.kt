@@ -4,16 +4,13 @@ import com.example.ddd.common.application.errors.ErrorResponse
 import com.example.ddd.order.application.controllers.requests.AddOrderProductRequest
 import com.example.ddd.order.application.controllers.requests.CreateOrderRequest
 import com.example.ddd.order.application.controllers.requests.OrderProductLineItemRequest
-import com.example.ddd.order.application.controllers.responses.OrderProductResponse
 import com.example.ddd.order.application.controllers.responses.OrderResponse
-import com.example.ddd.testUtils.deserializeJSON
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.util.UriComponentsBuilder.fromPath
 
@@ -26,8 +23,8 @@ class OrderControllerTest : BaseControllerTest() {
 
     @Test
     fun `should create an order`() {
-      val jsonResponseFilePath = "/controllers/order/createOrder.json"
       val request = CreateOrderRequest(
+        "cli-79a43474-decb-11ec-9d64-0242ac120002",
         listOf(
           OrderProductLineItemRequest("prd-8f6f04dc-dc73-11ec-9d64-0242ac120002", 2),
           OrderProductLineItemRequest("prd-95956b62-dc73-11ec-9d64-0242ac120002", 4)
@@ -35,16 +32,23 @@ class OrderControllerTest : BaseControllerTest() {
       )
 
       val response = restTemplate.postForEntity("/orders", request, OrderResponse::class.java)
-      val expectedResponse = cleanResponse(response, jsonResponseFilePath)
+      val order = response.body!!
 
-      assertNotNull(response)
       assertEquals(HttpStatus.CREATED, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+
+      assertNotNull(order.id)
+      assertEquals(2, order.products.size)
+      assertEquals("5.00", order.products[0].totalPrice)
+      assertEquals(2, order.products[0].quantity)
+      assertEquals("30.00", order.products[1].totalPrice)
+      assertEquals(4, order.products[1].quantity)
+      assertEquals("35.00", order.totalPrice)
     }
 
     @Test
-    fun `should fail to create an order for non existing products`() {
+    fun `should throw an exception if the client does not exist`() {
       val request = CreateOrderRequest(
+        "cli-1",
         listOf(
           OrderProductLineItemRequest("prd-1", 2),
           OrderProductLineItemRequest("prd-99", 4)
@@ -53,20 +57,42 @@ class OrderControllerTest : BaseControllerTest() {
 
       val response = restTemplate.postForEntity("/orders", request, ErrorResponse::class.java)
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "RESOURCE_NOT_FOUND",
         "Not found",
         "The requested resource could not be found"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
 
     @Test
-    fun `should fail to create an order with more quantity than stock available for a product`() {
+    fun `should throw an exception if any product does not exist`() {
       val request = CreateOrderRequest(
+        "cli-79a43474-decb-11ec-9d64-0242ac120002",
+        listOf(
+          OrderProductLineItemRequest("prd-1", 2),
+          OrderProductLineItemRequest("prd-99", 4)
+        )
+      )
+
+      val response = restTemplate.postForEntity("/orders", request, ErrorResponse::class.java)
+
+      val expectedError = ErrorResponse(
+        "RESOURCE_NOT_FOUND",
+        "Not found",
+        "The requested resource could not be found"
+      )
+
+      assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+      assertEquals(expectedError, response.body)
+    }
+
+    @Test
+    fun `should throw an exception if any product does not have enough stock`() {
+      val request = CreateOrderRequest(
+        "cli-79a43474-decb-11ec-9d64-0242ac120002",
         listOf(
           OrderProductLineItemRequest("prd-8f6f04dc-dc73-11ec-9d64-0242ac120002", 20),
           OrderProductLineItemRequest("prd-95956b62-dc73-11ec-9d64-0242ac120002", 4)
@@ -75,15 +101,14 @@ class OrderControllerTest : BaseControllerTest() {
 
       val response = restTemplate.postForEntity("/orders", request, ErrorResponse::class.java)
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "BAD_REQUEST",
         "Bad request",
         "Bad request"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
   }
 
@@ -190,31 +215,5 @@ class OrderControllerTest : BaseControllerTest() {
       assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
       assertEquals(expectedResponse, response.body)
     }
-  }
-
-  private fun cleanResponse(response: ResponseEntity<OrderResponse>, jsonResponseFilePath: String): OrderResponse {
-    val beerOrderProduct =
-      response.body!!.products.first { it.productId == "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002" }
-    val steakOrderProduct =
-      response.body!!.products.first { it.productId == "prd-95956b62-dc73-11ec-9d64-0242ac120002" }
-
-    val expectedJsonResponse = deserializeJSON<OrderResponse>(jsonResponseFilePath)
-
-    val tempProductList = mutableListOf<OrderProductResponse>()
-
-    expectedJsonResponse.products.forEach {
-      if (it.productId == beerOrderProduct.productId) {
-        tempProductList.add(it.copy(id = beerOrderProduct.id))
-      } else {
-        tempProductList.add(it.copy(steakOrderProduct.id))
-      }
-    }
-
-    return expectedJsonResponse.copy(
-      id = response.body?.id.toString(),
-      products = tempProductList,
-      createdAt = response.body?.createdAt.toString(),
-      updatedAt = response.body?.updatedAt.toString()
-    )
   }
 }

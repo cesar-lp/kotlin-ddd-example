@@ -2,6 +2,7 @@ package com.example.ddd.order.domain.useCases
 
 import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.OrderNotFoundException
+import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.models.entities.Order
 import io.mockk.every
 import io.mockk.verifyAll
@@ -25,6 +26,10 @@ class GetOrderUseCaseTest : BaseUseCaseTest() {
 
     val existingOrder = Order(
       id = id,
+      client = Client(
+        id = "cli-79a43474-decb-11ec-9d64-0242ac120002",
+        fullName = "John Doe"
+      ),
       products = mutableSetOf(),
       total = Money.ZERO()
     )

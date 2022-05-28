@@ -1,6 +1,7 @@
 package com.example.ddd.common.application.config
 
 import com.example.ddd.common.application.errors.ErrorResponse
+import com.example.ddd.order.domain.errors.ClientNotFoundException
 import com.example.ddd.order.domain.errors.InvalidProductPriceException
 import com.example.ddd.order.domain.errors.InvalidProductStatusException
 import com.example.ddd.order.domain.errors.InvalidProductStockException
@@ -20,7 +21,8 @@ class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     value = [
       OrderNotFoundException::class,
       ProductNotFoundException::class,
-      ProductsNotFoundException::class
+      ProductsNotFoundException::class,
+      ClientNotFoundException::class
     ]
   )
   fun handleResourceNotFoundException(e: Exception): ResponseEntity<ErrorResponse> {

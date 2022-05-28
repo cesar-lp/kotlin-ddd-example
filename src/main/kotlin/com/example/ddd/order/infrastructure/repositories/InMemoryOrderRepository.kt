@@ -1,6 +1,7 @@
 package com.example.ddd.order.infrastructure.repositories
 
 import com.example.ddd.common.domain.models.Money
+import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.models.entities.Order
 import com.example.ddd.order.domain.models.entities.OrderProduct
 import com.example.ddd.order.domain.models.entities.Product
@@ -14,6 +15,10 @@ class InMemoryOrderRepository : OrderRepository {
   private val orders: MutableSet<Order> = mutableSetOf(
     Order(
       id = "ord-4e1dc2ac-debc-11ec-9d64-0242ac120002",
+      client = Client(
+        id = "cli-79a43474-decb-11ec-9d64-0242ac120002",
+        fullName = "John Doe"
+      ),
       products = mutableSetOf(
         OrderProduct.of(
           product = Product(
@@ -30,6 +35,10 @@ class InMemoryOrderRepository : OrderRepository {
     ),
     Order(
       id = "ord-28014332-dec1-11ec-9d64-0242ac120002",
+      client = Client(
+        id = "cli-8e2cd9dc-decb-11ec-9d64-0242ac120002",
+        fullName = "John Poe"
+      ),
       products = mutableSetOf(
         OrderProduct.of(
           product = Product(

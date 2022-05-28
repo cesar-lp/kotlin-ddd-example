@@ -6,5 +6,6 @@ data class OrderLineItem(
 )
 
 data class NewOrder(
+  val clientId: String,
   val lineItems: List<OrderLineItem>
 )

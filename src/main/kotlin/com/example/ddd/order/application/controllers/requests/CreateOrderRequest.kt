@@ -6,5 +6,6 @@ data class OrderProductLineItemRequest(
 )
 
 data class CreateOrderRequest(
+  val clientId: String,
   val lineItems: List<OrderProductLineItemRequest>
 )
