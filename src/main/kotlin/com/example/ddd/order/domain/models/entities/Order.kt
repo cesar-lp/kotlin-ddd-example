@@ -23,12 +23,12 @@ class Order(
 
     total += if (existingOrderProduct != null) {
       existingOrderProduct.updateQuantity(quantity)
-      existingOrderProduct.getUnitPrice() * quantity
+      existingOrderProduct.unitPrice * quantity
     } else {
       val orderProduct = OrderProduct.of(product, quantity)
 
       products.add(orderProduct)
-      orderProduct.getTotalPrice()
+      orderProduct.totalPrice
     }
   }
 

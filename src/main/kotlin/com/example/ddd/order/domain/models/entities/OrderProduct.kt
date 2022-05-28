@@ -5,35 +5,43 @@ import com.example.ddd.common.domain.models.Money
 
 class OrderProduct private constructor(
   val id: String = ID.generate("orp"),
-  val productId: String,
-  val name: String,
-  val description: String,
-  private val unitPrice: Money,
-  var quantity: Int,
-  private var totalPrice: Money
+  private val product: Product,
+  private var _quantity: Int,
+  private var _totalPrice: Money
 ) {
 
   companion object {
 
     fun of(product: Product, quantity: Int): OrderProduct {
       return OrderProduct(
-        productId = product.id,
-        name = product.name,
-        description = product.description,
-        unitPrice = product.getPrice(),
-        quantity = quantity,
-        totalPrice = product.getPrice() * quantity
+        product = product,
+        _quantity = quantity,
+        _totalPrice = product.getPrice() * quantity
       )
     }
   }
 
+  val productId: String
+    get() = product.id
+
+  val name: String
+    get() = product.name
+
+  val description: String
+    get() = product.description
+
+  val unitPrice: Money
+    get() = product.getPrice()
+
+  val quantity: Int
+    get() = _quantity
+
+  val totalPrice: Money
+    get() = _totalPrice
+
   fun updateQuantity(quantity: Int) {
-    this.quantity += quantity
-    totalPrice += unitPrice * quantity
+    _quantity += quantity
+    _totalPrice += product.getPrice() * quantity
   }
-
-  fun getUnitPrice() = unitPrice
-
-  fun getTotalPrice() = totalPrice
 
 }

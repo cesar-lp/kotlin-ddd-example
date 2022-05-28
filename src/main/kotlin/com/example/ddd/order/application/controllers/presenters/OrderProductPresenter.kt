@@ -13,13 +13,13 @@ class OrderProductPresenterImpl : OrderProductPresenter {
 
   override fun invoke(orderProduct: OrderProduct): OrderProductResponse {
     return OrderProductResponse(
-      id = orderProduct.id.toString(),
-      productId = orderProduct.productId.toString(),
+      id = orderProduct.id,
+      productId = orderProduct.productId,
       name = orderProduct.name,
       description = orderProduct.description,
-      unitPrice = orderProduct.getUnitPrice().getValue(),
+      unitPrice = orderProduct.unitPrice.getValue(),
       quantity = orderProduct.quantity,
-      totalPrice = orderProduct.getTotalPrice().getValue()
+      totalPrice = orderProduct.totalPrice.getValue()
     )
   }
 
