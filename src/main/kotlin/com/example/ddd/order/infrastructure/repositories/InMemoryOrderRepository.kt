@@ -11,41 +11,35 @@ import java.math.BigDecimal
 @Repository
 class InMemoryOrderRepository : OrderRepository {
 
-  final val orders: MutableSet<Order> = mutableSetOf()
+  private final val orders: MutableSet<Order> = mutableSetOf()
 
   init {
-    val firstOrder = Order.of(
-      Client(id = "cli-79a43474-decb-11ec-9d64-0242ac120002", fullName = "John Doe")
-    ).apply {
-      addProduct(
-        product = Product(
-          id = "prd-95956b62-dc73-11ec-9d64-0242ac120002",
-          name = "Steak",
-          description = "Big steak",
-          stock = 5,
-          price = Money.of(BigDecimal("7.50"))
-        ),
-        quantity = 1
-      )
+    val johnDoe = Client(id = "cli-79a43474-decb-11ec-9d64-0242ac120002", fullName = "John Doe")
+    val johnPoe = Client(id = "cli-8e2cd9dc-decb-11ec-9d64-0242ac120002", fullName = "John Poe")
+
+    val steak = Product(
+      id = "prd-95956b62-dc73-11ec-9d64-0242ac120002",
+      name = "Steak",
+      description = "Big steak",
+      stock = 5,
+      price = Money.of(BigDecimal("7.50"))
+    )
+
+    val firstOrder = Order.of(johnDoe).apply {
+      addProduct(product = steak, quantity = 1)
     }
 
-    val secondOrder = Order.of(
-      Client(id = "cli-8e2cd9dc-decb-11ec-9d64-0242ac120002", fullName = "John Poe")
-    ).apply {
-      addProduct(
-        product = Product(
-          id = "prd-95956b62-dc73-11ec-9d64-0242ac120002",
-          name = "Steak",
-          description = "Big steak",
-          stock = 5,
-          price = Money.of(BigDecimal("7.50"))
-        ),
-        quantity = 1
-      )
+    val secondOrder = Order.of(johnPoe).apply {
+      addProduct(product = steak, quantity = 1)
+    }
+
+    val thirdOrder = Order.of(johnDoe).apply {
+      addProduct(product = steak, quantity = 2)
     }
 
     orders.add(firstOrder)
     orders.add(secondOrder)
+    orders.add(thirdOrder)
   }
 
   override fun save(order: Order): Order {
@@ -62,4 +56,7 @@ class InMemoryOrderRepository : OrderRepository {
     return orders
   }
 
+  override fun getByClient(clientId: String): Set<Order> {
+    return this.orders.filter { it.client.id == clientId }.toSet()
+  }
 }

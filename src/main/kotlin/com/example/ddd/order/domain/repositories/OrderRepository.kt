@@ -10,4 +10,6 @@ interface OrderRepository {
 
   fun getAll(): Set<Order>
 
+  fun getByClient(clientId: String): Set<Order>
+
 }

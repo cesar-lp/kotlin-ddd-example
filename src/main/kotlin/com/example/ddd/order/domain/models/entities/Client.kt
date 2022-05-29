@@ -5,7 +5,7 @@ import java.time.Instant
 
 class Client(
   val id: String = ID.generate("cli"),
-  val fullName: String,
-  val createdAt: Instant = Instant.now(),
-  val updatedAt: Instant = Instant.now()
+  var fullName: String,
+  private val createdAt: Instant = Instant.now(),
+  private val updatedAt: Instant = Instant.now()
 )
