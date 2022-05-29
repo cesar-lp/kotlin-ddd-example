@@ -7,9 +7,7 @@ import com.example.ddd.order.application.controllers.requests.CreateProductReque
 import com.example.ddd.order.application.controllers.requests.UpdateProductRequest
 import com.example.ddd.order.application.controllers.responses.ProductResponse
 import com.example.ddd.order.domain.models.entities.ProductStatus
-import com.example.ddd.testUtils.deserializeJSON
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -30,34 +28,35 @@ class ProductControllerTest : BaseControllerTest() {
   inner class GetProduct {
 
     @Test
-    fun `should get 200 with a product response`() {
-      val jsonResponseFilePath = "/controllers/product/getProduct.json"
-
+    fun `should get a product`() {
       val response = restTemplate.getForEntity("/products/${BEER_PRODUCT_ID}", ProductResponse::class.java)
+      val product = response.body!!
 
-      val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
-        createdAt = response.body?.createdAt.toString(),
-        updatedAt = response.body?.updatedAt.toString()
+      val expectedProduct = product.copy(
+        id = "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002",
+        name = "Beer",
+        description = "Enjoy your day with a nice cold beer",
+        status = "enabled",
+        stock = 10,
+        price = "2.50"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.OK, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedProduct, product)
     }
 
     @Test
-    fun `should get 404 with an error response`() {
+    fun `should throw an exception for a non existing product`() {
       val response = restTemplate.getForEntity("/products/prd-0", ErrorResponse::class.java)
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "RESOURCE_NOT_FOUND",
         "Not found",
         "The requested resource could not be found"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
   }
 
@@ -67,21 +66,21 @@ class ProductControllerTest : BaseControllerTest() {
   inner class CreateProduct {
 
     @Test
-    fun `should get a 201 with a product response`() {
-      val jsonResponseFilePath = "/controllers/product/createProduct.json"
+    fun `should create a product`() {
       val request = CreateProductRequest(name = "Coke", description = "Coke can", price = BigDecimal("2.50"))
 
       val response = restTemplate.postForEntity("/products", request, ProductResponse::class.java)
+      val product = response.body!!
 
-      val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
-        id = response.body?.id.toString(),
-        createdAt = response.body?.createdAt.toString(),
-        updatedAt = response.body?.updatedAt.toString()
+      val expectedProduct = product.copy(
+        name = "Coke",
+        description = "Coke can",
+        status = "enabled",
+        price = "2.50"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.CREATED, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedProduct, product)
     }
   }
 
@@ -92,59 +91,61 @@ class ProductControllerTest : BaseControllerTest() {
 
     @Test
     fun `should update a product`() {
-      val jsonResponseFilePath = "/controllers/product/updateProduct.json"
       val request = UpdateProductRequest("New product name", "New product description", BigDecimal("2.50"))
 
       val response = restTemplate.exchange(
         "/products/${STEAK_PRODUCT_ID}", HttpMethod.PUT, HttpEntity(request), ProductResponse::class.java
       )
 
-      val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
-        createdAt = response.body?.createdAt.toString(),
-        updatedAt = response.body?.updatedAt.toString()
+      val product = response.body!!
+
+      val expectedProduct = product.copy(
+        id = "prd-95956b62-dc73-11ec-9d64-0242ac120002",
+        name = "New product name",
+        description = "New product description",
+        status = "enabled",
+        stock = 5,
+        price = "2.50"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.OK, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedProduct, product)
     }
 
     @Test
-    fun `should fail to update a non existing product`() {
+    fun `should throw an exception when the product does not exist`() {
       val request = UpdateProductRequest("New product name", "New product description", price = BigDecimal("2.50"))
 
       val response = restTemplate.exchange(
         "/products/prd-0", HttpMethod.PUT, HttpEntity(request), ErrorResponse::class.java
       )
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "RESOURCE_NOT_FOUND",
         "Not found",
         "The requested resource could not be found"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
 
     @Test
-    fun `should fail to update a product with an invalid price`() {
+    fun `should throw an exception if the new price is invalid`() {
       val request = UpdateProductRequest("New product name", "New product description", price = BigDecimal("0"))
 
       val response = restTemplate.exchange(
         "/products/${BEER_PRODUCT_ID}", HttpMethod.PUT, HttpEntity(request), ErrorResponse::class.java
       )
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "BAD_REQUEST",
         "Bad request",
         "Bad request"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
   }
 
@@ -155,59 +156,60 @@ class ProductControllerTest : BaseControllerTest() {
 
     @Test
     fun `should change a product's status`() {
-      val jsonResponseFilePath = "/controllers/product/disabledProduct.json"
       val request = ChangeProductStatusRequest(ProductStatus.DISABLED.description)
 
       val response = restTemplate.exchange(
         "/products/${BEER_PRODUCT_ID}/status", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
       )
+      val product = response.body!!
 
-      val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
-        createdAt = response.body?.createdAt.toString(),
-        updatedAt = response.body?.updatedAt.toString()
+      val expectedProduct = product.copy(
+        id = "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002",
+        name = "Beer",
+        description = "Enjoy your day with a nice cold beer",
+        status = "disabled",
+        stock = 10,
+        price = "2.50"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.OK, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedProduct, product)
     }
 
     @Test
-    fun `should not change the status of a non existing product`() {
+    fun `should throw an exception if the product does not exist`() {
       val request = ChangeProductStatusRequest(ProductStatus.DISABLED.description)
 
       val response = restTemplate.exchange(
         "/products/prd-0/status", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
       )
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "RESOURCE_NOT_FOUND",
         "Not found",
         "The requested resource could not be found"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
 
     @Test
-    fun `should not change a product's status to an invalid value`() {
+    fun `should throw an exception if the status is invalid`() {
       val request = ChangeProductStatusRequest("invalid value")
 
       val response = restTemplate.exchange(
         "/products/${BEER_PRODUCT_ID}/status", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
       )
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "BAD_REQUEST",
         "Bad request",
         "Bad request"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
   }
 
@@ -217,60 +219,61 @@ class ProductControllerTest : BaseControllerTest() {
   inner class AddStock {
 
     @Test
-    fun `should increment the stock of a product`() {
-      val jsonResponseFilePath = "/controllers/product/productWithStockUpdated.json"
+    fun `should increment a product's stock`() {
       val request = AddProductStockRequest(5)
 
       val response = restTemplate.exchange(
         "/products/${BEER_PRODUCT_ID}/stock", HttpMethod.PATCH, HttpEntity(request), ProductResponse::class.java
       )
+      val product = response.body!!
 
-      val expectedResponse = deserializeJSON<ProductResponse>(jsonResponseFilePath).copy(
-        createdAt = response.body?.createdAt.toString(),
-        updatedAt = response.body?.updatedAt.toString()
+      val expectedProduct = product.copy(
+        id = "prd-8f6f04dc-dc73-11ec-9d64-0242ac120002",
+        name = "Beer",
+        description = "Enjoy your day with a nice cold beer",
+        status = "enabled",
+        stock = 15,
+        price = "2.50"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.OK, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedProduct, product)
     }
 
     @Test
-    fun `should fail to increment the stock of a non existing product`() {
+    fun `should throw an exception if the product does not exist`() {
       val request = AddProductStockRequest(5)
 
       val response = restTemplate.exchange(
         "/products/prd-0/stock", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
       )
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "RESOURCE_NOT_FOUND",
         "Not found",
         "The requested resource could not be found"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
 
     @Test
-    fun `should fail to increment the stock with an invalid value`() {
-      val request = AddProductStockRequest(-11)
+    fun `should throw an exception if the product does not have enough stock`() {
+      val request = AddProductStockRequest(-50)
 
       val response = restTemplate.exchange(
         "/products/${BEER_PRODUCT_ID}/stock", HttpMethod.PATCH, HttpEntity(request), ErrorResponse::class.java
       )
 
-      val expectedResponse = ErrorResponse(
+      val expectedError = ErrorResponse(
         "BAD_REQUEST",
         "Bad request",
         "Bad request"
       )
 
-      assertNotNull(response)
       assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
-      assertEquals(expectedResponse, response.body)
+      assertEquals(expectedError, response.body)
     }
   }
 }
