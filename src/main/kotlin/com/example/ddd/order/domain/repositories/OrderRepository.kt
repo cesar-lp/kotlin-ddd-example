@@ -8,4 +8,6 @@ interface OrderRepository {
 
   fun get(id: String): Order?
 
+  fun getAll(): Set<Order>
+
 }

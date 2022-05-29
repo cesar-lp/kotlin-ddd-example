@@ -5,44 +5,52 @@ import com.example.ddd.common.domain.models.Money
 import java.time.Instant
 import java.util.*
 
-class Order(
+class Order private constructor(
   val id: String = ID.generate("ord"),
   val client: Client,
-  val products: MutableSet<OrderProduct> = mutableSetOf(),
-  private var total: Money = Money.ZERO(),
+  private val _products: MutableSet<OrderProduct> = mutableSetOf(),
+  private var _totalPrice: Money = Money.ZERO(),
   val createdAt: Instant = Instant.now(),
   var updatedAt: Instant = Instant.now()
 ) {
 
-  fun getTotalPrice() = total.getValue()
+  companion object {
+    fun of(client: Client) = Order(client = client)
+  }
+
+  val totalPrice: Money
+    get() = _totalPrice
+
+  val products: Set<OrderProduct>
+    get() = _products
 
   fun addProduct(product: Product, quantity: Int) {
     product.updateStock(-quantity)
 
-    val existingOrderProduct = products.firstOrNull { it.productId == product.id }
+    val existingOrderProduct = _products.firstOrNull { it.productId == product.id }
 
-    total += if (existingOrderProduct != null) {
+    _totalPrice += if (existingOrderProduct != null) {
       existingOrderProduct.updateQuantity(quantity)
       existingOrderProduct.unitPrice * quantity
     } else {
       val orderProduct = OrderProduct.of(product, quantity)
 
-      products.add(orderProduct)
+      _products.add(orderProduct)
       orderProduct.totalPrice
     }
   }
 
-  override fun hashCode() = Objects.hash(id, products.map { it.id })
+  override fun hashCode() = Objects.hash(id, _products.map { it.id })
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is Order) return false
 
-    return (other.id == id && other.products.map { it.id } == products.map { it.id })
+    return (other.id == id && other._products.map { it.id } == _products.map { it.id })
   }
 
   override fun toString(): String {
-    return "Order(id: ${id}, products: ${products}, total: ${total})"
+    return "Order(id: ${id}, products: ${_products}, total: ${_totalPrice})"
   }
 
 }

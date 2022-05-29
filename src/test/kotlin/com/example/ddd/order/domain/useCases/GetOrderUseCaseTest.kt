@@ -1,6 +1,5 @@
 package com.example.ddd.order.domain.useCases
 
-import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.errors.OrderNotFoundException
 import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.models.entities.Order
@@ -24,14 +23,8 @@ class GetOrderUseCaseTest : BaseUseCaseTest() {
   fun `should get an order from DB and return it`() {
     val id = "ord-1"
 
-    val existingOrder = Order(
-      id = id,
-      client = Client(
-        id = "cli-79a43474-decb-11ec-9d64-0242ac120002",
-        fullName = "John Doe"
-      ),
-      products = mutableSetOf(),
-      total = Money.ZERO()
+    val existingOrder = Order.of(
+      Client(id = "cli-79a43474-decb-11ec-9d64-0242ac120002", fullName = "John Doe")
     )
 
     every { orderRepository.get(any()) } returns existingOrder

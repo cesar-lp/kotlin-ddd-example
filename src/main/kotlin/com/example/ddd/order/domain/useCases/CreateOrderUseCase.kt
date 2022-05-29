@@ -30,7 +30,7 @@ class CreateOrderUseCaseImpl(
 
     val productQuantityMap = newOrder.lineItems.associateBy({ it.productId }, { it.quantity })
 
-    val order = Order(client = client)
+    val order = Order.of(client)
 
     products.forEach {
       val quantity = productQuantityMap[it.id]!!

@@ -8,7 +8,6 @@ import com.example.ddd.order.domain.models.NewOrder
 import com.example.ddd.order.domain.models.OrderLineItem
 import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.models.entities.Order
-import com.example.ddd.order.domain.models.entities.OrderProduct
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.OrderRepository
 import com.example.ddd.order.domain.repositories.ProductRepository
@@ -78,14 +77,10 @@ class CreateOrderUseCaseTest {
       listOf(OrderLineItem("prd-1", 4), OrderLineItem("prd-2", 2))
     )
 
-    val expectedOrderCreated = Order(
-      client = existingClient,
-      products = mutableSetOf(
-        OrderProduct.of(existingProducts.first(), 4),
-        OrderProduct.of(existingProducts.elementAt(1), 2)
-      ),
-      total = Money.of("25")
-    )
+    val expectedOrderCreated = Order.of(existingClient).apply {
+      addProduct(existingProducts.first(), 4)
+      addProduct(existingProducts.elementAt(1), 2)
+    }
 
     every { productRepository.save(any<Set<Product>>()) } just runs
     every { orderRepository.save(any()) } returns expectedOrderCreated

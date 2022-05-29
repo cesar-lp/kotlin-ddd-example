@@ -5,11 +5,14 @@ import com.example.ddd.order.application.controllers.requests.AddOrderProductReq
 import com.example.ddd.order.application.controllers.requests.CreateOrderRequest
 import com.example.ddd.order.application.controllers.requests.OrderProductLineItemRequest
 import com.example.ddd.order.application.controllers.responses.OrderResponse
+import com.example.ddd.order.infrastructure.repositories.InMemoryOrderRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.web.util.UriComponentsBuilder.fromPath
@@ -117,26 +120,34 @@ class OrderControllerTest : BaseControllerTest() {
   @DisplayName("POST - /orders/{orderId}/products")
   inner class AddOrderProduct {
 
-    private val existingOrderUrl = fromPath("/orders")
+    @Autowired
+    private lateinit var orderRepository: InMemoryOrderRepository
+
+    private lateinit var orderId: String
+    private lateinit var secondOrderId: String
+
+    @BeforeEach
+    fun beforeEach() {
+      orderId = orderRepository.getAll().first().id
+      secondOrderId = orderRepository.getAll().elementAt(1).id
+    }
+
+    private fun buildUrl(orderId: String) = fromPath("/orders")
       .path("/{orderId}/products")
-      .buildAndExpand(hashMapOf("orderId" to "ord-4e1dc2ac-debc-11ec-9d64-0242ac120002"))
+      .buildAndExpand(hashMapOf("orderId" to orderId))
       .toString()
 
     @Test
     fun `should add a product to an order`() {
       val request = AddOrderProductRequest(productId = "prd-c6064f50-dc73-11ec-9d64-0242ac120002", quantity = 2)
 
-      val url = fromPath("/orders")
-        .path("/{orderId}/products")
-        .buildAndExpand(hashMapOf("orderId" to "ord-28014332-dec1-11ec-9d64-0242ac120002"))
-        .toString()
-
-      val response = restTemplate.postForEntity(url, request, OrderResponse::class.java)
+      val response =
+        restTemplate.postForEntity(buildUrl(secondOrderId), request, OrderResponse::class.java)
       val order = response.body!!
 
       assertEquals(HttpStatus.OK, response.statusCode)
 
-      assertEquals("ord-28014332-dec1-11ec-9d64-0242ac120002", order.id)
+      assertEquals(secondOrderId, order.id)
       assertEquals(2, order.products.size)
       assertEquals("7.50", order.products.first().totalPrice)
       assertEquals("6.00", order.products[1].totalPrice)
@@ -148,12 +159,13 @@ class OrderControllerTest : BaseControllerTest() {
     fun `should increment the quantity of an existing order product`() {
       val request = AddOrderProductRequest(productId = "prd-95956b62-dc73-11ec-9d64-0242ac120002", quantity = 1)
 
-      val response = restTemplate.postForEntity(existingOrderUrl, request, OrderResponse::class.java)
+      val response =
+        restTemplate.postForEntity(buildUrl(orderId), request, OrderResponse::class.java)
       val order = response.body!!
 
       assertEquals(HttpStatus.OK, response.statusCode)
 
-      assertEquals("ord-4e1dc2ac-debc-11ec-9d64-0242ac120002", order.id)
+      assertEquals(orderId, order.id)
       assertEquals(1, order.products.size)
       assertEquals(2, order.products.first().quantity)
       assertEquals("15.00", order.products.first().totalPrice)
@@ -186,7 +198,8 @@ class OrderControllerTest : BaseControllerTest() {
     fun `should throw an exception if the product does not exist`() {
       val request = AddOrderProductRequest(productId = "prd-9", quantity = 1)
 
-      val response = restTemplate.postForEntity(existingOrderUrl, request, ErrorResponse::class.java)
+      val response =
+        restTemplate.postForEntity(buildUrl(orderId), request, ErrorResponse::class.java)
 
       val expectedResponse = ErrorResponse(
         "RESOURCE_NOT_FOUND",
@@ -203,7 +216,8 @@ class OrderControllerTest : BaseControllerTest() {
     fun `should throw an exception if the product does not have enough stock`() {
       val request = AddOrderProductRequest(productId = "prd-95956b62-dc73-11ec-9d64-0242ac120002", quantity = 6)
 
-      val response = restTemplate.postForEntity(existingOrderUrl, request, ErrorResponse::class.java)
+      val response =
+        restTemplate.postForEntity(buildUrl(orderId), request, ErrorResponse::class.java)
 
       val expectedResponse = ErrorResponse(
         "BAD_REQUEST",
