@@ -1,4 +1,4 @@
-package com.example.ddd.order.domain.errors
+package com.example.ddd.order.domain.errors.product
 
 class InvalidProductStatusException(
   val id: String,

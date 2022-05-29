@@ -4,6 +4,7 @@ import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.repositories.ProductRepository
+import com.example.ddd.order.infrastructure.repositories.inMemory.InMemoryProductRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach

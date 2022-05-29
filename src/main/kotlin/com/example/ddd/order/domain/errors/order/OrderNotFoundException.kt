@@ -1,6 +1,6 @@
-package com.example.ddd.order.domain.errors
+package com.example.ddd.order.domain.errors.order
 
-class ProductNotFoundException(
+class OrderNotFoundException(
   val id: String,
   message: String? = "",
   throwable: Throwable? = null

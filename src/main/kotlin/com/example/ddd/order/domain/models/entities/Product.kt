@@ -2,9 +2,9 @@ package com.example.ddd.order.domain.models.entities
 
 import com.example.ddd.common.domain.models.ID
 import com.example.ddd.common.domain.models.Money
-import com.example.ddd.order.domain.errors.InvalidProductPriceException
-import com.example.ddd.order.domain.errors.InvalidProductStatusException
-import com.example.ddd.order.domain.errors.InvalidProductStockException
+import com.example.ddd.order.domain.errors.product.InvalidProductPriceException
+import com.example.ddd.order.domain.errors.product.InvalidProductStatusException
+import com.example.ddd.order.domain.errors.product.InvalidProductStockException
 import java.time.Instant
 import java.util.*
 

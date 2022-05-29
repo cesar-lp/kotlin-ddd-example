@@ -1,4 +1,4 @@
-package com.example.ddd.order.domain.errors
+package com.example.ddd.order.domain.errors.product
 
 import com.example.ddd.common.domain.models.Money
 

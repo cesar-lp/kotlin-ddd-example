@@ -1,4 +1,4 @@
-package com.example.ddd.order.domain.useCases
+package com.example.ddd.order.domain.useCases.client
 
 import com.example.ddd.order.domain.models.ClientOrders
 import com.example.ddd.order.domain.repositories.OrderRepository

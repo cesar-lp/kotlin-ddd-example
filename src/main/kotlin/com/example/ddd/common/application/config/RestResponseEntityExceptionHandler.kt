@@ -1,13 +1,13 @@
 package com.example.ddd.common.application.config
 
 import com.example.ddd.common.application.errors.ErrorResponse
-import com.example.ddd.order.domain.errors.ClientNotFoundException
-import com.example.ddd.order.domain.errors.InvalidProductPriceException
-import com.example.ddd.order.domain.errors.InvalidProductStatusException
-import com.example.ddd.order.domain.errors.InvalidProductStockException
-import com.example.ddd.order.domain.errors.OrderNotFoundException
-import com.example.ddd.order.domain.errors.ProductNotFoundException
-import com.example.ddd.order.domain.errors.ProductsNotFoundException
+import com.example.ddd.order.domain.errors.client.ClientNotFoundException
+import com.example.ddd.order.domain.errors.order.OrderNotFoundException
+import com.example.ddd.order.domain.errors.product.InvalidProductPriceException
+import com.example.ddd.order.domain.errors.product.InvalidProductStatusException
+import com.example.ddd.order.domain.errors.product.InvalidProductStockException
+import com.example.ddd.order.domain.errors.product.ProductNotFoundException
+import com.example.ddd.order.domain.errors.product.ProductsNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice

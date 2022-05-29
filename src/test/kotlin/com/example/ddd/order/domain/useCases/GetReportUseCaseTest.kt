@@ -1,7 +1,7 @@
 package com.example.ddd.order.domain.useCases
 
 import com.example.ddd.common.domain.models.Money
-import com.example.ddd.order.domain.errors.ClientNotFoundException
+import com.example.ddd.order.domain.errors.client.ClientNotFoundException
 import com.example.ddd.order.domain.models.ClientOrders
 import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.models.entities.Order

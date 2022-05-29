@@ -1,6 +1,6 @@
-package com.example.ddd.order.domain.useCases
+package com.example.ddd.order.domain.useCases.client
 
-import com.example.ddd.order.domain.errors.ClientNotFoundException
+import com.example.ddd.order.domain.errors.client.ClientNotFoundException
 import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.repositories.ClientRepository
 import org.springframework.stereotype.Service

@@ -1,6 +1,6 @@
-package com.example.ddd.order.domain.useCases
+package com.example.ddd.order.domain.useCases.order
 
-import com.example.ddd.order.domain.errors.OrderNotFoundException
+import com.example.ddd.order.domain.errors.order.OrderNotFoundException
 import com.example.ddd.order.domain.models.entities.Order
 import com.example.ddd.order.domain.repositories.OrderRepository
 import org.springframework.stereotype.Service

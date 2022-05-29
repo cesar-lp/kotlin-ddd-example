@@ -1,8 +1,8 @@
 package com.example.ddd.order.domain.useCases
 
 import com.example.ddd.common.domain.models.Money
-import com.example.ddd.order.domain.errors.InvalidProductStatusException
-import com.example.ddd.order.domain.errors.ProductNotFoundException
+import com.example.ddd.order.domain.errors.product.InvalidProductStatusException
+import com.example.ddd.order.domain.errors.product.ProductNotFoundException
 import com.example.ddd.order.domain.models.entities.Product
 import com.example.ddd.order.domain.models.entities.ProductStatus
 import com.example.ddd.order.domain.repositories.ProductRepository

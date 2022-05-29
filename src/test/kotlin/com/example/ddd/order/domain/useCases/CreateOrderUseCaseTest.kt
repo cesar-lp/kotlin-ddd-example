@@ -1,9 +1,9 @@
 package com.example.ddd.order.domain.useCases
 
 import com.example.ddd.common.domain.models.Money
-import com.example.ddd.order.domain.errors.ClientNotFoundException
-import com.example.ddd.order.domain.errors.InvalidProductStockException
-import com.example.ddd.order.domain.errors.ProductsNotFoundException
+import com.example.ddd.order.domain.errors.client.ClientNotFoundException
+import com.example.ddd.order.domain.errors.product.InvalidProductStockException
+import com.example.ddd.order.domain.errors.product.ProductsNotFoundException
 import com.example.ddd.order.domain.models.NewOrder
 import com.example.ddd.order.domain.models.OrderLineItem
 import com.example.ddd.order.domain.models.entities.Client

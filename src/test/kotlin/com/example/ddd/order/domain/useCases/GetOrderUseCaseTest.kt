@@ -1,6 +1,6 @@
 package com.example.ddd.order.domain.useCases
 
-import com.example.ddd.order.domain.errors.OrderNotFoundException
+import com.example.ddd.order.domain.errors.order.OrderNotFoundException
 import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.models.entities.Order
 import io.mockk.every

@@ -1,4 +1,4 @@
-package com.example.ddd.order.infrastructure.repositories
+package com.example.ddd.order.infrastructure.repositories.inMemory
 
 import com.example.ddd.order.domain.models.entities.Client
 import com.example.ddd.order.domain.repositories.ClientRepository

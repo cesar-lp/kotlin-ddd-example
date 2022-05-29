@@ -1,8 +1,9 @@
-package com.example.ddd.order.domain.useCases
+package com.example.ddd.order.domain.useCases.order
 
 import com.example.ddd.order.domain.models.entities.Order
 import com.example.ddd.order.domain.repositories.OrderRepository
 import com.example.ddd.order.domain.repositories.ProductRepository
+import com.example.ddd.order.domain.useCases.product.GetProductUseCase
 import org.springframework.stereotype.Service
 
 interface AddOrderProductUseCase {

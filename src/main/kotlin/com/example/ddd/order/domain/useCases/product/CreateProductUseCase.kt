@@ -1,4 +1,4 @@
-package com.example.ddd.order.domain.useCases
+package com.example.ddd.order.domain.useCases.product
 
 import com.example.ddd.common.domain.models.Money
 import com.example.ddd.order.domain.models.NewProduct

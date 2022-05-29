@@ -1,8 +1,8 @@
 package com.example.ddd.order.domain.useCases
 
 import com.example.ddd.common.domain.models.ID
-import com.example.ddd.order.domain.errors.InvalidProductStockException
-import com.example.ddd.order.domain.errors.ProductNotFoundException
+import com.example.ddd.order.domain.errors.product.InvalidProductStockException
+import com.example.ddd.order.domain.errors.product.ProductNotFoundException
 import com.example.ddd.order.domain.models.entities.Product
 import io.mockk.Called
 import io.mockk.every

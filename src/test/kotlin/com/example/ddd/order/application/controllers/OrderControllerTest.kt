@@ -5,7 +5,7 @@ import com.example.ddd.order.application.controllers.requests.AddOrderProductReq
 import com.example.ddd.order.application.controllers.requests.CreateOrderRequest
 import com.example.ddd.order.application.controllers.requests.OrderProductLineItemRequest
 import com.example.ddd.order.application.controllers.responses.OrderResponse
-import com.example.ddd.order.infrastructure.repositories.InMemoryOrderRepository
+import com.example.ddd.order.infrastructure.repositories.inMemory.InMemoryOrderRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
